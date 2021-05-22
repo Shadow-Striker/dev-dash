@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    public static ObjectPool SharedObjectPool;
+    public static ObjectPool SharedInstance;
     //Stores a list of all the gameObjects that have been preloaded.
     public List<GameObject> pooledObjects;
     public GameObject objectToPool;
@@ -14,7 +14,7 @@ public class ObjectPool : MonoBehaviour
     private void Awake()
     {
         //Setting ObjectPool variable, (which is null on initialisation) to this script.
-        SharedObjectPool = this;
+        SharedInstance = this;
     }
 
     // Start is called before the first frame update
@@ -24,6 +24,8 @@ public class ObjectPool : MonoBehaviour
         pooledObjects = new List<GameObject>();
         GameObject temp;
 
+
+        ///This code creates a set of pre-instantiated gameObjects to use before the game even starts.
         //1. Instantiate a new object
         //2. Deactivate it for later use
         //3. Add the new gameObject to the list of pooledObjects.
@@ -34,6 +36,18 @@ public class ObjectPool : MonoBehaviour
             temp.SetActive(false);
             pooledObjects.Add(temp);
         }
+    }
+
+    public GameObject GetPooledObject()
+    {
+        for(int i = 0; i < amountToPool; i++)
+        {
+            if (!pooledObjects[i].activeInHierarchy)
+            {
+                return pooledObjects[i];
+            }
+        }
+        return null;
     }
 
     // Update is called once per frame

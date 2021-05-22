@@ -11,7 +11,7 @@ public class Spawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timeLeftBtwnSpawns = timeBtwnSpawns;
+        timeLeftBtwnSpawns = Random.Range(2f,5f);
     }
 
     // Update is called once per frame
@@ -26,8 +26,14 @@ public class Spawn : MonoBehaviour
 
         if (timeLeftBtwnSpawns <= 0)
         {
-            Instantiate(spawnObject, transform);
-            timeLeftBtwnSpawns = timeBtwnSpawns;
+            GameObject newCar = ObjectPool.SharedInstance.GetPooledObject();
+
+            if(newCar != null)
+            {
+                newCar.transform.position = transform.position;
+                newCar.SetActive(true);
+            }
+            timeLeftBtwnSpawns = Random.Range(2f, 5f);
         }
     }
 }
