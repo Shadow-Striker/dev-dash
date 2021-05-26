@@ -14,19 +14,27 @@ public class AICar : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         Vector3 screenVector = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height));
+
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
+       
+        print(screenVector);
+        print("Screen Height: " + Screen.height);
+        print("Screen Width: " + Screen.width);
     }
 
     void Movement()
     {
         transform.position += speed * direction.normalized * Time.deltaTime;
+    }
 
-        if (transform.position.y - spriteRenderer.bounds.extents.y <= -screenVector.y)
+    private void OnBecameInvisible()
+    {
+        if (transform.position.y - spriteRenderer.bounds.extents.y <= -screenVector.y * 2)
         {
             gameObject.SetActive(false);
         }
