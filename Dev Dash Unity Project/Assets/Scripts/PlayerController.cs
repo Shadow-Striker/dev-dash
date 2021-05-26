@@ -5,86 +5,82 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float deadZone;
+    [SerializeField] private int currentLaneNumber = 1;
     [SerializeField] private bool tap, swipeLeft, swipeRight;
     private bool isDragging = false;
-    private Vector2 startTouchPos, swipeDelta;
+    [SerializeField] private Vector2 startMousePos, endMousePos;
+    [SerializeField] private Vector2[] lanePositions;
+    public Vector3 mousePos;
 
-    public Vector2 SwipeDelta { get { return swipeDelta; } }
+    //public Vector2 SwipeDelta { get { return swipeDelta; } }
     public bool SwipeLeft { get { return swipeLeft; } }
     public bool SwipeRight { get { return swipeRight; } }
 
+    private void Start()
+    {
+        
+    }
+
     private void Update()
     {
-        tap = swipeLeft = swipeRight = false;
+        swipeLeft = swipeRight = false;
+        MouseCode();
+        SwitchLanes();
+    }
 
-        if(Input.GetMouseButtonDown(0))
+    private void MouseCode()
+    {
+        if (Input.GetMouseButtonDown(0))
         {
-            tap = true;
-            isDragging = true;
-            startTouchPos = Input.mousePosition;
-        }
-        else if(Input.GetMouseButtonUp(0))
-        {
-            isDragging = false;
-            ResetTouchPositions();
-        }
-
-        //Calculate distance
-        swipeDelta = Vector3.zero;
-
-        if (isDragging)
-        {
-            if(Input.GetMouseButton(0))
-            {
-                swipeDelta = (Vector2)Input.mousePosition - startTouchPos;
-            }
-            else if(Input.GetMouseButtonUp(0))
-            {
-                isDragging = false;
-                ResetTouchPositions();
-            }
+            print("Held down mouse button");
+            startMousePos = Input.mousePosition;
         }
 
-        //Deadzone
-        if(swipeDelta.magnitude > 125)
+        if(Input.GetMouseButtonUp(0))
         {
-            //Calculate direction of swipe
-            float x = swipeDelta.x;
-            float y = swipeDelta.y;
+            //float moveLength = (endMousePos - startMousePos).sqrMagnitude;
 
-            if (x < 0)
+           // if (moveLength < 30) return;
+
+            endMousePos = Input.mousePosition;
+
+            Vector2 moveDirection = (endMousePos - startMousePos).normalized;
+            print("Move Dir: " + moveDirection);
+
+
+            if(moveDirection.x < 0)
             {
                 swipeLeft = true;
             }
-            else
+            else if(moveDirection.x > 0)
             {
                 swipeRight = true;
             }
-
-            ResetTouchPositions();
         }
 
-        Movement();
+
     }
 
-    private void ResetTouchPositions()
-    {
-        startTouchPos = Vector2.zero;
-        swipeDelta = Vector2.zero;
-    }
-
-    private void Movement()
+    private void SwitchLanes()
     {
         if (swipeLeft)
         {
-            //transform.position += Vector3.left * speed;
-            print("Move left");
+            if (transform.position.x != lanePositions[0].x)
+            {
+                transform.position = new Vector3(lanePositions[currentLaneNumber - 1].x, transform.position.y, 0);
+                currentLaneNumber -= 1;
+            }
         }
+
         else if (swipeRight)
         {
-            //transform.position += Vector3.right * speed;
-            print("Move right");
+            if (transform.position.x != lanePositions[2].x)
+            {
+                transform.position = new Vector3(lanePositions[currentLaneNumber + 1].x, transform.position.y, 0);
+                currentLaneNumber += 1;
+            }
         }
     }
 }
