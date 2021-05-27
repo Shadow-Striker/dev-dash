@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int currentLaneNumber = 1;
     [SerializeField] private bool tap, swipeLeft, swipeRight;
     private bool isDragging = false;
+    private bool moveLeft = false;
+    private bool moveRight = false;
+    private float distanceBtwnLanes = 2f;
     [SerializeField] private Vector2 startMousePos, endMousePos;
     [SerializeField] private Vector2[] lanePositions;
     public Vector3 mousePos;
@@ -69,7 +72,8 @@ public class PlayerController : MonoBehaviour
         {
             if (transform.position.x != lanePositions[0].x)
             {
-                transform.position = new Vector3(lanePositions[currentLaneNumber - 1].x, transform.position.y, 0);
+                moveLeft = true;
+               // transform.position = new Vector3(lanePositions[currentLaneNumber - 1].x, transform.position.y, 0);
                 currentLaneNumber -= 1;
             }
         }
@@ -82,5 +86,33 @@ public class PlayerController : MonoBehaviour
                 currentLaneNumber += 1;
             }
         }
+
+        if(moveLeft && transform.position.x != -distanceBtwnLanes)
+        {
+            transform.position += Vector3.left * distanceBtwnLanes * Time.deltaTime;
+        }
+        else
+        {
+
+        }
+
+        while(moveLeft)
+        {
+            transform.position += Vector3.left * distanceBtwnLanes * Time.deltaTime;
+            if(transform.position.x <= -distanceBtwnLanes)
+            {
+                moveLeft = false;
+            }
+        }
+
+        while (moveRight)
+        {
+            transform.position += Vector3.right * distanceBtwnLanes * Time.deltaTime;
+            if (transform.position.x >= distanceBtwnLanes)
+            {
+                moveLeft = false;
+            }
+        }
     }
+    
 }
