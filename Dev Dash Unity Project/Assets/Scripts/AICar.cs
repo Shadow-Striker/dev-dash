@@ -21,10 +21,6 @@ public class AICar : MonoBehaviour
     void Update()
     {
         Movement();
-       
-        print(screenVector);
-        print("Screen Height: " + Screen.height);
-        print("Screen Width: " + Screen.width);
     }
 
     void Movement()
@@ -37,6 +33,19 @@ public class AICar : MonoBehaviour
         if (transform.position.y - spriteRenderer.bounds.extents.y <= -screenVector.y * 2)
         {
             gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            IDamagable playerDamagable = collision.gameObject.GetComponent<IDamagable>();
+
+            if(playerDamagable != null)
+            {
+                playerDamagable.TakeDamage(1);
+            }
         }
     }
 }

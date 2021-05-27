@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamagable
 {
+    private SpriteRenderer spriteRenderer;
+    private GameManager gameManager;
+    [SerializeField] private int startingHealth;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float deadZone;
     [SerializeField] private int currentLaneNumber = 1;
@@ -18,13 +21,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector2[] lanePositions;
     public Vector3 mousePos;
 
-    //public Vector2 SwipeDelta { get { return swipeDelta; } }
+    //IDamagable
+    public int StartingHealth
+    {
+        get
+        {
+            return startingHealth;
+        }
+        private set
+        {
+            startingHealth = value;
+        }
+    }
+
+    public int Health { get; set; }
     public bool SwipeLeft { get { return swipeLeft; } }
     public bool SwipeRight { get { return swipeRight; } }
 
     private void Start()
     {
-        
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        gameManager = FindObjectOfType<GameManager>();
+        Health = startingHealth;
     }
 
     private void Update()
@@ -32,7 +50,7 @@ public class PlayerController : MonoBehaviour
         swipeLeft = swipeRight = false;
         MouseCode();
         SwitchLanes();
-        LaneMovement();
+        if(!gameManager.IsGameOver) LaneMovement();
     }
 
     private void MouseCode()
@@ -49,16 +67,13 @@ public class PlayerController : MonoBehaviour
 
             Vector2 moveDirection = (endMousePos - startMousePos).normalized;
 
-
             if(moveDirection.x < 0)
             {
                 swipeLeft = true;
-                print("Swiped to the left");
             }
             else if(moveDirection.x > 0)
             {
                 swipeRight = true;
-                print("Swiped to the right");
             }
         }
     }
@@ -110,5 +125,26 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
+
+    /*private void Fade()
+    {
+        float alpha = spriteRenderer.color.a;
+        if (spriteRenderer.color.a == 1f)
+            alpha -= 1;
+        spriteRenderer = alpha;
+    }*/
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "AICar")
+        {
+            print("Collided with AI Car");
+        }
+    }
+
+    public void TakeDamage(int _damage)
+    {
+        if(Health > 0)
+        Health -= _damage;
+    }
 }
