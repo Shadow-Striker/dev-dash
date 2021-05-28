@@ -7,7 +7,6 @@ public class AICar : MonoBehaviour
     [SerializeField] public float speed;
     [SerializeField] private Vector3 direction;
     private SpriteRenderer spriteRenderer;
-
     private GameManager gameManager;
     private Vector3 screenVector;
 
@@ -17,8 +16,8 @@ public class AICar : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
 
-        Vector3 screenVector = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height));
 
+        Vector3 screenVector = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height));
     }
 
     // Update is called once per frame
@@ -39,10 +38,10 @@ public class AICar : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        if (transform.position.y - spriteRenderer.bounds.extents.y <= -screenVector.y * 2)
-        {
+        //if (transform.position.y - spriteRenderer.bounds.extents.y <= -screenVector.y * 2)
+       // {
             gameObject.SetActive(false);
-        }
+       // }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

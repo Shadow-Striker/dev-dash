@@ -5,7 +5,6 @@ using UnityEngine;
 public class CarHorn : MonoBehaviour
 {
     [SerializeField] private float playSoundDelayLeft;
-    //private float playSoundDelay = 1;
     private AudioSource audioSource;
     private GameManager gameManager;
     [SerializeField] private AudioClip[] carHorns; 

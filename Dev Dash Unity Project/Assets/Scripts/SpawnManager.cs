@@ -11,9 +11,4 @@ public class SpawnManager : MonoBehaviour
     {
         timeBetweenSpawns = Random.Range(1, 6);
     }
-
-    // Update is called once per frame
-    void Update()
-    {   
-    }
 }
