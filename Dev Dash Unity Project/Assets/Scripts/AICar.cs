@@ -7,6 +7,7 @@ public class AICar : MonoBehaviour
     [SerializeField] public float speed;
     [SerializeField] private Vector3 direction;
     private SpriteRenderer spriteRenderer;
+
     private GameManager gameManager;
     private Vector3 screenVector;
 
@@ -15,6 +16,7 @@ public class AICar : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
+
         Vector3 screenVector = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height));
 
     }
@@ -33,11 +35,6 @@ public class AICar : MonoBehaviour
     void Movement()
     {
         transform.position += speed * direction.normalized * Time.deltaTime;
-    }
-
-    private void Audio()
-    {
-
     }
 
     private void OnBecameInvisible()
