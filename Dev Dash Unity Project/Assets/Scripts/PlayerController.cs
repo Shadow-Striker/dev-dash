@@ -68,7 +68,12 @@ public class PlayerController : MonoBehaviour, IDamagable
         swipeLeft = swipeRight = false;
         MouseCode();
         SwitchLanes();
-        if(!gameManager.IsGameOver) LaneMovement();
+        if (gameManager.IsGameOver == false || gameManager.HasWonGame == false)
+        {
+            print("HAS WON GAME: " + gameManager.HasWonGame);
+            print("IS GAME OVER: " + gameManager.IsGameOver);
+            LaneMovement();
+        }
 
         if(damageImmunity)
         {
@@ -134,6 +139,8 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void LaneMovement()
     {
+        if(gameManager.IsGameOver == true || gameManager.HasWonGame == true)
+        print("Why tho");
         if (moveLeft)
         {
             transform.position += Vector3.left * moveSpeed * Time.deltaTime;

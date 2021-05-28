@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AICar : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] public float speed;
     [SerializeField] private Vector3 direction;
     private SpriteRenderer spriteRenderer;
     private GameManager gameManager;
@@ -25,14 +25,19 @@ public class AICar : MonoBehaviour
         if (!gameManager.HasWonGame)
         {
             Movement();
-            if (speed < 9)
-                speed += 0.000001f;
+            if (speed < 7)
+                speed += 0.0008f;
         }
     }
 
     void Movement()
     {
         transform.position += speed * direction.normalized * Time.deltaTime;
+    }
+
+    private void Audio()
+    {
+
     }
 
     private void OnBecameInvisible()

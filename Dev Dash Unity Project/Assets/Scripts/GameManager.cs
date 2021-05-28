@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool hasWonGame = false;
+    [SerializeField] private bool hasWonGame = false;
     public bool HasWonGame
     {
         get
@@ -65,9 +65,10 @@ public class GameManager : MonoBehaviour
         if(distanceLeft <= 0)
         {
             hasWonGame = true;
+            distanceLeft = 0;
         }
 
-        if (distanceLeft > 0)
+        if (distanceLeft > 0 && !isGameOver)
         {
             distanceLeft -= 0.02f * Time.deltaTime;
         }

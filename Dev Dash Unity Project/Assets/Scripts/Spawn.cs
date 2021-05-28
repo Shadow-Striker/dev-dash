@@ -4,14 +4,30 @@ using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
-    [SerializeField] private GameObject spawnObject;
-    [SerializeField] private float timeBtwnSpawns;
+    //[SerializeField] private GameObject spawnObject;
+    //[SerializeField] private float timeBtwnSpawns;
     [SerializeField] private float timeLeftBtwnSpawns;
+    [SerializeField] private int minTime, maxTime;
+    [SerializeField] private float carSpeed;
+    public float CarSpeed
+    {
+        get
+        {
+            return carSpeed;
+        }
+        set
+        {
+            carSpeed = value;
+        }
+    }
+
+        
+
 
     // Start is called before the first frame update
     void Start()
     {
-        timeLeftBtwnSpawns = Random.Range(2f,5f);
+        timeLeftBtwnSpawns = Random.Range(minTime,maxTime);
     }
 
     // Update is called once per frame
@@ -31,9 +47,10 @@ public class Spawn : MonoBehaviour
             if(newCar != null)
             {
                 newCar.transform.position = transform.position;
+
                 newCar.SetActive(true);
             }
-            timeLeftBtwnSpawns = Random.Range(2f, 5f);
+            timeLeftBtwnSpawns = Random.Range(minTime, maxTime + 1);
         }
     }
 }
