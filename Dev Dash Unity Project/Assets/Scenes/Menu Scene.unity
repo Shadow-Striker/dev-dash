@@ -1042,7 +1042,7 @@ GameObject:
   - component: {fileID: 1205079118}
   - component: {fileID: 1205079117}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Title Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1306,7 +1306,7 @@ GameObject:
   - component: {fileID: 1992228875}
   - component: {fileID: 1992228874}
   m_Layer: 5
-  m_Name: Panel (1)
+  m_Name: Objective Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

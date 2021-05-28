@@ -6,14 +6,16 @@ public class AICar : MonoBehaviour
 {
     [SerializeField] public float speed;
     [SerializeField] private Vector3 direction;
-    private SpriteRenderer spriteRenderer;
     private GameManager gameManager;
-
+    private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite[] sprites;
     // Start is called before the first frame update
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
     }
 
     // Update is called once per frame
