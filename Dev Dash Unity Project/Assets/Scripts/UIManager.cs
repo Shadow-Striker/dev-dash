@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text distanceText;
 
     private PlayerController playerController;
+    [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private GameObject winScreen;
     private GameManager gameManager;
 
     // Start is called before the first frame update
@@ -17,13 +19,33 @@ public class UIManager : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
         gameManager = FindObjectOfType<GameManager>();
         healthText.text = "Health : " + playerController.StartingHealth;
-        distanceText.text = "Distance Left: 3";
+        distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft + " miles";
     }
 
     // Update is called once per frame
     void Update()
     {
-        healthText.text = "Health : " + playerController.Health;
-        distanceText.text = "Distance Left: " + gameManager.DistanceLeft + " miles";
+        healthText.text = "Health: " + playerController.Health;
+        distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft + " miles";
+
+        if (gameManager.HasWonGame)
+        {
+            DisplayWinScreen();
+        }
+
+        if(gameManager.IsGameOver)
+        {
+            DisplayGameOverScreen();
+        }
     }
+
+    private void DisplayGameOverScreen()
+    {
+        gameOverScreen.SetActive(true);
+    }
+
+    private void DisplayWinScreen()
+    {
+        winScreen.SetActive(true);
+  }
 }

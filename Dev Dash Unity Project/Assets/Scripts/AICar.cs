@@ -7,12 +7,14 @@ public class AICar : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Vector3 direction;
     private SpriteRenderer spriteRenderer;
+    private GameManager gameManager;
     private Vector3 screenVector;
 
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        gameManager = FindObjectOfType<GameManager>();
         Vector3 screenVector = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height));
 
     }
@@ -20,7 +22,12 @@ public class AICar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if (!gameManager.HasWonGame)
+        {
+            Movement();
+            if (speed < 9)
+                speed += 0.000001f;
+        }
     }
 
     void Movement()
@@ -42,7 +49,7 @@ public class AICar : MonoBehaviour
         {
             IDamagable playerDamagable = collision.gameObject.GetComponent<IDamagable>();
 
-            if(playerDamagable != null)
+            if(playerDamagable != null && !playerDamagable.DamageImmunity)
             {
                 playerDamagable.TakeDamage(1);
             }

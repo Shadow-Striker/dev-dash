@@ -45,4 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnObject: {fileID: 6406941712863148280, guid: 8aded6e262d26a545a5aef486408fc1d,
     type: 3}
-  timeBtwnSpawns: 3
+  timeBtwnSpawns: 3.5
+  timeLeftBtwnSpawns: 0

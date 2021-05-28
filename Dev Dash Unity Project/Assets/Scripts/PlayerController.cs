@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour, IDamagable
 {
     private SpriteRenderer spriteRenderer;
     private GameManager gameManager;
+    [SerializeField] private bool damageImmunity;
+    [SerializeField] private float damageImmuneTime;
+    [SerializeField] private float damageImmuneTimeLeft;
     [SerializeField] private int startingHealth;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float deadZone;
@@ -34,6 +37,20 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
+    public bool DamageImmunity
+    {
+        get
+        {
+            return damageImmunity;
+        }
+
+        private set
+        {
+            damageImmunity = value;
+        }
+    }
+
+
     public int Health { get; set; }
     public bool SwipeLeft { get { return swipeLeft; } }
     public bool SwipeRight { get { return swipeRight; } }
@@ -43,6 +60,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
         Health = startingHealth;
+        damageImmuneTimeLeft = damageImmuneTime;
     }
 
     private void Update()
@@ -51,6 +69,19 @@ public class PlayerController : MonoBehaviour, IDamagable
         MouseCode();
         SwitchLanes();
         if(!gameManager.IsGameOver) LaneMovement();
+
+        if(damageImmunity)
+        {
+            if (damageImmuneTimeLeft > 0)
+            {
+                damageImmuneTimeLeft -= 1 * Time.deltaTime;
+            }
+            else
+            {
+                damageImmuneTimeLeft = damageImmuneTime;
+                damageImmunity = false;
+            }
+        }
     }
 
     private void MouseCode()
@@ -139,6 +170,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         if(collision.gameObject.tag == "AICar")
         {
             print("Collided with AI Car");
+            damageImmunity = true;
         }
     }
 

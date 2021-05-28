@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
     private PlayerController playerController;
     [SerializeField] private GameObject gameOverScreen;
-    private float distanceLeft = 3;
+    [SerializeField] private GameObject winScreen;
+    [SerializeField] private float distanceLeft = 3;
     public float DistanceLeft
     {
         get
@@ -34,6 +35,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private bool hasWonGame = false;
+    public bool HasWonGame
+    {
+        get
+        {
+            return hasWonGame;
+        }
+        private set
+        {
+            hasWonGame = value;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,16 +59,19 @@ public class GameManager : MonoBehaviour
     {
         if(playerController.Health <= 0)
         {
-            DisplayGameOverScreen();
+            isGameOver = true;
         }
-        distanceLeft -= 0.02f * Time.deltaTime;
+        
+        if(distanceLeft <= 0)
+        {
+            hasWonGame = true;
+        }
 
-    }
-
-    private void DisplayGameOverScreen()
-    {
-        gameOverScreen.SetActive(true);
-        IsGameOver = true;
+        if (distanceLeft > 0)
+        {
+            distanceLeft -= 0.02f * Time.deltaTime;
+        }
+       
     }
 
     public void ReloadGameScene()
