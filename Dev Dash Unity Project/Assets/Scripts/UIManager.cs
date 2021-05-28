@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    //This class is in charge of the UI.
     [SerializeField] private Text healthText;
     [SerializeField] private Text distanceText;
 
@@ -18,6 +19,7 @@ public class UIManager : MonoBehaviour
     {
         playerController = FindObjectOfType<PlayerController>();
         gameManager = FindObjectOfType<GameManager>();
+        //Set health text to display player's starting health.
         healthText.text = "Health : " + playerController.StartingHealth;
         distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft + " miles";
     }
@@ -25,14 +27,17 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update texts every frame.
         healthText.text = "Health: " + playerController.Health;
         distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft + " miles";
 
+        //Display win screen if player has won.
         if (gameManager.HasWonGame)
         {
             DisplayWinScreen();
         }
 
+        //Display game over screen if player has lost.
         if(gameManager.IsGameOver)
         {
             DisplayGameOverScreen();
