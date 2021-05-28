@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
-    //[SerializeField] private GameObject spawnObject;
-    //[SerializeField] private float timeBtwnSpawns;
     [SerializeField] private float timeLeftBtwnSpawns;
     [SerializeField] private int minTime, maxTime;
+
+    //Car speed can be read by other classes but it's value cannot be changed by other classes.
     [SerializeField] private float carSpeed;
     public float CarSpeed
     {
@@ -21,12 +21,10 @@ public class Spawn : MonoBehaviour
         }
     }
 
-        
-
-
     // Start is called before the first frame update
     void Start()
     {
+        //Set the time between car spawns to a random value.
         timeLeftBtwnSpawns = Random.Range(minTime,maxTime);
     }
 
@@ -38,7 +36,11 @@ public class Spawn : MonoBehaviour
 
     void SpawnCar()
     {
+        //Decrease time left between spawns every frame.
         timeLeftBtwnSpawns -= Time.deltaTime;
+
+        //if timeLeftBtwnSpawns <= 0 get a inactive car from the object pool and activate it.
+        //Then set timeLeftBtwnSpawns to new value.
 
         if (timeLeftBtwnSpawns <= 0)
         {

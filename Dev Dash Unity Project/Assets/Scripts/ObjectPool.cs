@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
+    #region OBJECT POOLING INFO
+    //This class for object pooling
+    //Object pooling is a design pattern that is used for optimisation,
+    //particularly for mobile games.
+    //It works by pre-instantiating objects into a list before the game starts, then
+    //disabling them until the game requires them.
+    //This is a better approach as instantiating and destroying objects can severely
+    //impact performance.
+    //For this game I have used it for the cars, as I have them spawning and despawning
+    //relatively quickly.
+    #endregion
+    
+     //Single instance of object pool
     public static ObjectPool SharedInstance;
-    //Stores a list of all the gameObjects that have been preloaded.
+    //Stores a list of all the gameObjects that have been pre-instantiated.
     public List<GameObject> pooledObjects;
     public GameObject objectToPool;
     //Number of objects to pool.
@@ -38,21 +51,19 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
+    //This function can be called by other classes when a car needs to be spawned.
+    //Replaces Unity's Instantiate function.
     public GameObject GetPooledObject()
     {
         for(int i = 0; i < amountToPool; i++)
         {
+            //Only return cars that are not currently being used.
+            //else return null.
             if (!pooledObjects[i].activeInHierarchy)
             {
                 return pooledObjects[i];
             }
         }
         return null;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

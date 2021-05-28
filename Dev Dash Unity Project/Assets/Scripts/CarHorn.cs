@@ -22,6 +22,10 @@ public class CarHorn : MonoBehaviour
         PlayCarHorn();
     }
 
+    //Decrease time until next car horn sound can play.
+    //Once the playSoundDelayLeft reaches zero and the player hasn't won the game yet, play a car horn sound.
+    //After playing, select a random car horn sound form the carHorns array for next time + choose a random delay period.
+
     private void PlayCarHorn()
     {
         playSoundDelayLeft -= 1 * Time.deltaTime;

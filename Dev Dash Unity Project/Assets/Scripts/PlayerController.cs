@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private Vector2[] lanePositions;
     public Vector3 mousePos;
 
-    //IDamagable
+    //These variables are from the IDamagable interface.
     public int StartingHealth
     {
         get
@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour, IDamagable
 
 
     public int Health { get; set; }
+    
+    //Can be read by other classes but not set.
     public bool SwipeLeft { get { return swipeLeft; } }
     public bool SwipeRight { get { return swipeRight; } }
 
@@ -65,16 +67,19 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        //Reset swiping left and right to false every frame.
         swipeLeft = swipeRight = false;
         MouseCode();
         SwitchLanes();
+
         if (gameManager.IsGameOver == false || gameManager.HasWonGame == false)
         {
-            print("HAS WON GAME: " + gameManager.HasWonGame);
-            print("IS GAME OVER: " + gameManager.IsGameOver);
             LaneMovement();
         }
-
+        
+        //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
+        //Decrease damageImmuneTimeLeft by 1 every frame
+        //Else reset damageImmuneTimeLeft and set damageImmunity to false.
         if(damageImmunity)
         {
             if (damageImmuneTimeLeft > 0)
@@ -91,23 +96,27 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void MouseCode()
     {
+        //Stores position of the cursor when the left mouse button is clicked.
         if (Input.GetMouseButtonDown(0))
         {
-            print("Held down mouse button");
             startMousePos = Input.mousePosition;
         }
 
+        //When the left mouse button is released, store the position of the cursor.
+        //These two positions can then be used to calculate the direction of the swipe.
         if(Input.GetMouseButtonUp(0))
         {
             endMousePos = Input.mousePosition;
 
             Vector2 moveDirection = (endMousePos - startMousePos).normalized;
 
+            //We know the player is swiping left if the direction is negative on the x axis.
             if(moveDirection.x < 0)
             {
                 swipeLeft = true;
             }
-            else if(moveDirection.x > 0)
+            //We know the player is swiping right if the direction is positive on the x axis.
+            else if (moveDirection.x > 0)
             {
                 swipeRight = true;
             }
@@ -116,8 +125,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void SwitchLanes()
     {
+        //Don't move the player to another lane if they are currently doing so.
         if (moveLeft || moveRight) return;
 
+        //Check if the player is not on the left most lane before moving the player to the left.
+        //This is to ensure the player does not go offscreen.
         if (swipeLeft)
         {
             if (currentLaneNumber != 0)
@@ -127,6 +139,7 @@ public class PlayerController : MonoBehaviour, IDamagable
             }
         }
 
+        //Same as above but for swiping right instead.
         else if (swipeRight)
         {
             if (currentLaneNumber != 2)
@@ -139,11 +152,15 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void LaneMovement()
     {
-        if(gameManager.IsGameOver == true || gameManager.HasWonGame == true)
-        print("Why tho");
+        //Don't execute this function if the player has won/lost.
+        if (gameManager.IsGameOver == true || gameManager.HasWonGame == true) return;
+
         if (moveLeft)
         {
+            //Move player to the left.
             transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+            //If the player's position is <= to the lane that they were supposed to be moving to,
+            //i.e if the player has gone further than they need to, reset the player's position.
             if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
             {
                 transform.position = new Vector2(lanePositions[currentLaneNumber - 1].x, transform.position.y);
@@ -152,6 +169,8 @@ public class PlayerController : MonoBehaviour, IDamagable
             }
         }
 
+
+        //Same as above but for moving right instead.
         if (moveRight)
         {
             transform.position += Vector3.right * moveSpeed * Time.deltaTime;
@@ -164,23 +183,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
-    /*private void Fade()
-    {
-        float alpha = spriteRenderer.color.a;
-        if (spriteRenderer.color.a == 1f)
-            alpha -= 1;
-        spriteRenderer = alpha;
-    }*/
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //If player collides with AI Car, set damageImmunity to true.
         if(collision.gameObject.tag == "AICar")
         {
-            print("Collided with AI Car");
             damageImmunity = true;
         }
     }
 
+    //Function from IDamagable interface.
     public void TakeDamage(int _damage)
     {
         if(Health > 0)

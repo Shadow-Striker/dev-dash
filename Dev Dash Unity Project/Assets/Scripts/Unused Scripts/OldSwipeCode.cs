@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// NO LONGER BEING USED
+/// FOR REFERENCE PURPOSES ONLY
+/// REFER TO PLAYERCONTROLLER FOR NEW SWIPING CODE
+/// </summary>
 public class OldSwipeCode : MonoBehaviour
 {
     [SerializeField] private float speed;
