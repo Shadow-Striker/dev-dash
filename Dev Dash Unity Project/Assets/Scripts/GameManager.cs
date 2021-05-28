@@ -7,6 +7,20 @@ public class GameManager : MonoBehaviour
 {
     private PlayerController playerController;
     [SerializeField] private GameObject gameOverScreen;
+    private float distanceLeft = 3;
+    public float DistanceLeft
+    {
+        get
+        {
+            return distanceLeft;
+        }
+        private set
+        {
+            distanceLeft = value;
+        }
+    }
+
+
     private bool isGameOver = false;
     public bool IsGameOver
     {
@@ -33,6 +47,7 @@ public class GameManager : MonoBehaviour
         {
             DisplayGameOverScreen();
         }
+        distanceLeft -= 0.02f * Time.deltaTime;
 
     }
 
