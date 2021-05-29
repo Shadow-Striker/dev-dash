@@ -82,7 +82,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerController = FindObjectOfType<PlayerController>();
-        gameStartDelay = 8f;
     }
 
     // Update is called once per frame

@@ -28,8 +28,8 @@ public class AICar : MonoBehaviour
         if (!gameManager.HasWonGame)
         {
             Movement();
-            if (speed < 7)
-                speed += 0.0008f;
+            if (speed < 8.5f)
+                speed += 0.002f;
         }
     }
 
