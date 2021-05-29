@@ -47,7 +47,7 @@ public class UIManager : MonoBehaviour
 
         TogglePauseScreen();
 
-        //Change pause button text based on whether game is paused or not
+        //Change pause button text based on whether game is paused or not.
         if (gameManager.PauseState)
         {
             pauseText.text = "UNPAUSE";
@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
         winScreen.SetActive(true);
     }
 
-    //Disable or enable pause screen based on gameManager's pause state.
+    //Disables or enables pause screen based on gameManager's pause state.
     private void TogglePauseScreen()
     {
         if (gameManager.PauseState)

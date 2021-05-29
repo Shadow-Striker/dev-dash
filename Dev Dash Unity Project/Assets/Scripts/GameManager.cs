@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float distanceLeft = 3;
     [SerializeField] private float gameStartDelay;
     [SerializeField] private bool startGame = false;
+
+    //Allows other classes to get these variables but not set it.
+    //This is to prevent other classes from accidently changing the variable values
     public bool StartGame
     {
         get
@@ -36,9 +39,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    //Allows other classes to get these variables but not set it.
-    //This is to prevent other classes from accidently changing the variable values
     public float DistanceLeft
     {
         get
