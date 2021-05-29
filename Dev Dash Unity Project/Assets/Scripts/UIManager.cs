@@ -8,10 +8,12 @@ public class UIManager : MonoBehaviour
     //This class is in charge of the UI.
     [SerializeField] private Text healthText;
     [SerializeField] private Text distanceText;
+    [SerializeField] private Text pauseText;
 
     private PlayerController playerController;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject winScreen;
+    [SerializeField] private GameObject pauseScreen;
     private GameManager gameManager;
 
     // Start is called before the first frame update
@@ -42,6 +44,18 @@ public class UIManager : MonoBehaviour
         {
             DisplayGameOverScreen();
         }
+
+        TogglePauseScreen();
+
+        //Change pause button text based on whether game is paused or not
+        if (gameManager.PauseState)
+        {
+            pauseText.text = "UNPAUSE";
+        }
+        else
+        {
+            pauseText.text = "PAUSE";
+        }
     }
 
     private void DisplayGameOverScreen()
@@ -52,5 +66,18 @@ public class UIManager : MonoBehaviour
     private void DisplayWinScreen()
     {
         winScreen.SetActive(true);
-  }
+    }
+
+    //Disable or enable pause screen based on gameManager's pause state.
+    private void TogglePauseScreen()
+    {
+        if (gameManager.PauseState)
+        {
+            pauseScreen.SetActive(true);
+        }
+        else
+        {
+            pauseScreen.SetActive(false);
+        }
+    }
 }

@@ -9,6 +9,33 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject winScreen;
     [SerializeField] private float distanceLeft = 3;
+    [SerializeField] private float gameStartDelay;
+    [SerializeField] private bool startGame = false;
+    public bool StartGame
+    {
+        get
+        {
+            return startGame;
+        }
+        private set
+        {
+            startGame = value;
+        }
+    }
+
+    private bool pauseState = false;
+    public bool PauseState
+    {
+        get
+        {
+            return pauseState;
+        }
+        private set
+        {
+            pauseState = value;
+        }
+    }
+
 
     //Allows other classes to get these variables but not set it.
     //This is to prevent other classes from accidently changing the variable values
@@ -55,11 +82,23 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerController = FindObjectOfType<PlayerController>();
+        gameStartDelay = 8f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //The spawning of AI cars is delayed for a few seconds
+        //to allow the player to prepare and test the controls.
+        if(gameStartDelay > 0)
+        {
+            gameStartDelay -= 1 * Time.deltaTime;
+        }
+        else
+        {
+            startGame = true;
+        }
+
        //Once player's health reaches zero, isGameOver = true.
         if(playerController.Health <= 0)
         {
@@ -74,7 +113,7 @@ public class GameManager : MonoBehaviour
         }
 
         //if distanceLeft is more than zero and the player hasn't lost, keep decreasing distanceLeft every frame.
-        if (distanceLeft > 0 && !isGameOver)
+        if (distanceLeft > 0 && !isGameOver && startGame)
         {
             distanceLeft -= 0.02f * Time.deltaTime;
         }
@@ -85,5 +124,28 @@ public class GameManager : MonoBehaviour
     public void ReloadGameScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
+    }
+
+    public void TogglePauseState()
+    {
+        //If the game is paused and the player clicks the pause button, unpause the game.
+        //Unpause any audio as well.
+        //Then set pauseState to false.
+        if(pauseState)
+        {
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+            pauseState = false;
+        }
+        //If the game is not paused and the player clicks the pause button, pause the game.
+        //Pause any audio as well.
+        //Then set pauseState to true.
+        else
+        {
+            Time.timeScale = 0f;
+            AudioListener.pause = true;
+            pauseState = true;
+        }
     }
 }
