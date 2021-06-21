@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int noOfCars;
     [SerializeField] private bool canSpawnCar = true;
     [SerializeField] private float carSpeed = 4;
+    [SerializeField] private float maxCarSpeed = 4;
 
     //Allows other classes to get these variables but not set it.
     //This is to prevent other classes from accidently changing the variable values
@@ -171,8 +172,8 @@ public class GameManager : MonoBehaviour
             noOfCars = 0;
         }
 
-        if (startGame && carSpeed < 10f)
-            carSpeed += 0.1f * Time.deltaTime;
+        if (startGame && carSpeed < maxCarSpeed)
+            carSpeed += 0.13f * Time.deltaTime;
 
     }
 

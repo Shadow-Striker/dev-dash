@@ -233,8 +233,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -187, y: 423.4}
-  m_SizeDelta: {x: -365.5766, y: -821.32324}
+  m_AnchoredPosition: {x: -166.9, y: 416.2}
+  m_SizeDelta: {x: -325.26727, y: -806.9891}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &114242960
 MonoBehaviour:
@@ -385,7 +385,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 11, y: -49}
+  m_AnchoredPosition: {x: 11, y: -59}
   m_SizeDelta: {x: 294, y: 119.30109}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &310228976
@@ -409,7 +409,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
+    m_FontSize: 30
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
@@ -906,7 +906,7 @@ PrefabInstance:
     - target: {fileID: 700785233295926407, guid: ad1ad1f5c0274ba49b090cd456fcc4fc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.229
+      value: 11.099
       objectReference: {fileID: 0}
     - target: {fileID: 700785233295926407, guid: ad1ad1f5c0274ba49b090cd456fcc4fc,
         type: 3}
@@ -1632,7 +1632,8 @@ MonoBehaviour:
   startGame: 0
   noOfCars: 0
   canSpawnCar: 1
-  carSpeed: 4.5
+  carSpeed: 5
+  maxCarSpeed: 11
   hasWonGame: 0
 --- !u!1 &936082032
 GameObject:
@@ -2431,8 +2432,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426073053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.030000038, y: 8.414, z: 0}
-  m_LocalScale: {x: 7.6462607, y: 4.034899, z: 1}
+  m_LocalPosition: {x: -0.030000038, y: 8.585, z: 0}
+  m_LocalScale: {x: 7.6462607, y: 5.4189806, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -2521,7 +2522,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
+    m_FontSize: 30
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
@@ -2685,7 +2686,7 @@ PrefabInstance:
     - target: {fileID: 700785233295926407, guid: ad1ad1f5c0274ba49b090cd456fcc4fc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.22
+      value: 11.09
       objectReference: {fileID: 0}
     - target: {fileID: 700785233295926407, guid: ad1ad1f5c0274ba49b090cd456fcc4fc,
         type: 3}
@@ -3439,7 +3440,7 @@ PrefabInstance:
     - target: {fileID: 700785233295926407, guid: ad1ad1f5c0274ba49b090cd456fcc4fc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.257001
+      value: 11.127001
       objectReference: {fileID: 0}
     - target: {fileID: 700785233295926407, guid: ad1ad1f5c0274ba49b090cd456fcc4fc,
         type: 3}
