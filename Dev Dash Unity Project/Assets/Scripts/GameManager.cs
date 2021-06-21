@@ -179,6 +179,7 @@ public class GameManager : MonoBehaviour
     //This can be called by other classes to reload the game scene.
     public void ReloadGameScene()
     {
+        TogglePauseState();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
     }
