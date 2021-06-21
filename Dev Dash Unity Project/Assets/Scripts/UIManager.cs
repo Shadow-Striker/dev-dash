@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
     {
         //Update texts every frame.
         healthText.text = "Health: " + playerController.Health;
-        distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft + " miles";
+        distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft.ToString("F2") + " miles";
 
         //Display win screen if player has won.
         if (gameManager.HasWonGame)

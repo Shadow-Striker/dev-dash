@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spawn : MonoBehaviour
 {
     [SerializeField] private float timeLeftBtwnSpawns;
-    [SerializeField] private int minTime, maxTime;
+    [SerializeField] private float minTime, maxTime;
     private GameManager gameManager;
 
     //Car speed can be read by other classes but it's value cannot be changed by other classes.
@@ -50,15 +50,26 @@ public class Spawn : MonoBehaviour
 
         if (timeLeftBtwnSpawns <= 0)
         {
-            GameObject newCar = ObjectPool.SharedInstance.GetPooledObject();
-
-            if(newCar != null)
+            if (gameManager.CanSpawnCar)
             {
-                newCar.transform.position = transform.position;
+                GameObject newCar = ObjectPool.SharedInstance.GetPooledObject();
 
-                newCar.SetActive(true);
+                if (newCar != null)
+                {
+                    newCar.transform.position = transform.position;
+
+                    newCar.SetActive(true);
+                }
+                //gameManager.NoOfCars++;
+                timeLeftBtwnSpawns = Random.Range(minTime, maxTime + 1);
             }
-            timeLeftBtwnSpawns = Random.Range(minTime, maxTime + 1);
+            else
+            {
+                //timeLeftBtwnSpawns = Random.Range(minTime, maxTime);
+                print("Skipped spawning.");
+            }
         }
     }
+
+
 }

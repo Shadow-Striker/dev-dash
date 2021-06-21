@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float distanceLeft = 3;
     [SerializeField] private float gameStartDelay;
     [SerializeField] private bool startGame = false;
+    [SerializeField] private int noOfCars;
+    [SerializeField] private bool canSpawnCar = true;
+    [SerializeField] private float carSpeed = 4;
 
     //Allows other classes to get these variables but not set it.
     //This is to prevent other classes from accidently changing the variable values
@@ -78,6 +81,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    public int NoOfCars
+    {
+        get
+        {
+            return noOfCars;
+        }
+        set
+        {
+            noOfCars = value;
+        }
+    }
+
+    public bool CanSpawnCar
+    {
+        get
+        {
+            return canSpawnCar;
+        }
+        set
+        {
+            canSpawnCar = value;
+        }
+    }
+
+    public float CarSpeed
+    {
+        get
+        {
+            return carSpeed;
+        }
+        set
+        {
+            carSpeed = value;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -116,7 +156,24 @@ public class GameManager : MonoBehaviour
         {
             distanceLeft -= 0.02f * Time.deltaTime;
         }
-       
+
+        if (noOfCars >= 2)
+        {
+            canSpawnCar = false;
+        }
+        else
+        {
+            canSpawnCar = true;
+        }
+
+        if(noOfCars < 0)
+        {
+            noOfCars = 0;
+        }
+
+        if (startGame && carSpeed < 10f)
+            carSpeed += 0.1f * Time.deltaTime;
+
     }
 
     //This can be called by other classes to reload the game scene.
@@ -131,7 +188,7 @@ public class GameManager : MonoBehaviour
         //If the game is paused and the player clicks the pause button, unpause the game.
         //Unpause any audio as well.
         //Then set pauseState to false.
-        if(pauseState)
+        if(pauseState && !isGameOver && !hasWonGame)
         {
             Time.timeScale = 1f;
             AudioListener.pause = false;
@@ -140,7 +197,7 @@ public class GameManager : MonoBehaviour
         //If the game is not paused and the player clicks the pause button, pause the game.
         //Pause any audio as well.
         //Then set pauseState to true.
-        else
+        else if (!pauseState && !isGameOver && !hasWonGame)
         {
             Time.timeScale = 0f;
             AudioListener.pause = true;

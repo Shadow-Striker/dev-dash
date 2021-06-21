@@ -8,10 +8,12 @@ public class AICar : MonoBehaviour
     [SerializeField] private Vector3 direction;
     private GameManager gameManager;
     private SpriteRenderer spriteRenderer;
+    [SerializeField] private float speedModifier = 1f;
     [SerializeField] private Sprite[] sprites;
     // Start is called before the first frame update
     void Start()
     {
+        print("AI CAR CALLED");
         gameManager = FindObjectOfType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -28,20 +30,22 @@ public class AICar : MonoBehaviour
         if (!gameManager.HasWonGame)
         {
             Movement();
-            if (speed < 8.5f)
-                speed += 0.002f;
+           // if (speed < 8.5f)
+                //speed += 0.002f;
         }
     }
 
     //Moves car downwards every frame.
     void Movement()
-    {
-        transform.position += speed * direction.normalized * Time.deltaTime;
+    { 
+        transform.position += gameManager.CarSpeed * speedModifier * direction.normalized * Time.deltaTime;
     }
 
     //Deactivates car once it is no longer visible by the camera.
     private void OnBecameInvisible()
     {
+        spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
+        //gameManager.NoOfCars--;
         gameObject.SetActive(false);
     }
 
@@ -59,5 +63,43 @@ public class AICar : MonoBehaviour
                 playerDamagable.TakeDamage(1);
             }
         }
+
+        if (collision.gameObject.tag == "TwoCarsOnlyArea")
+        {
+            gameManager.NoOfCars++;
+        }
+
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "TwoCarsOnlyArea" && gameManager.NoOfCars > 2)
+        {
+            print("(DEACTIVATING BTW) NO. OF CARS LOL: " + gameManager.NoOfCars);
+            gameManager.NoOfCars--;
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "TwoCarsOnlyArea")
+        {
+            gameManager.NoOfCars--;
+        }
+    }
+
+    /*private void OnEnable()
+    {
+        //Adjusts the speed of the AI car when spawned.
+        int randInt = Random.Range(0, 2);
+        if (randInt == 0)
+        {
+            speedModifier = 1f;
+        }
+        else
+        {
+            speedModifier = 1.1f;
+        }
+    }*/
 }
