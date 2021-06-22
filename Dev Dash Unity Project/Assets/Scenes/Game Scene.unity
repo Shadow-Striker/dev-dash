@@ -1854,8 +1854,8 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.9245283, g: 0.5043316, b: 0.3532396, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9254902, g: 0.5058824, b: 0.3529412, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -3165,7 +3165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageImmunity: 0
-  damageImmuneTime: 3
+  damageImmuneTime: 2
   damageImmuneTimeLeft: 0
   startingHealth: 5
   moveSpeed: 12
@@ -3182,6 +3182,9 @@ MonoBehaviour:
   - {x: -2, y: 0}
   - {x: 0, y: 0}
   - {x: 2, y: 0}
+  decreaseAlpha: 0
+  increaseAlpha: 0
+  alphaLerpDuration: 0.27
   mousePos: {x: 0, y: 0, z: 0}
 --- !u!50 &2020252472
 Rigidbody2D:

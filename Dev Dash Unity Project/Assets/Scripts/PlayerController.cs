@@ -22,6 +22,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private Vector2 startMousePos, endMousePos;
     private Vector2 startingPos;
     [SerializeField] private Vector2[] lanePositions;
+    [SerializeField] private bool decreaseAlpha = false;
+    [SerializeField] private bool increaseAlpha = false;
+    private static float timeElapsed = 0.0f;
+    [SerializeField] private float alphaLerpDuration = 2f;
     public Vector3 mousePos;
 
     //These variables are from the IDamagable interface.
@@ -71,6 +75,18 @@ public class PlayerController : MonoBehaviour, IDamagable
         swipeLeft = swipeRight = false;
         MouseCode();
         SwitchLanes();
+
+        if(damageImmunity)
+        {
+            PlayImmuneAnim();
+        }
+        else
+        {
+            Color tempColour = spriteRenderer.color;
+            tempColour.a = 1f;
+            spriteRenderer.color = tempColour;
+        }
+
 
         if (gameManager.IsGameOver == false || gameManager.HasWonGame == false)
         {
@@ -197,5 +213,57 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if(Health > 0)
         Health -= _damage;
+
+    }
+
+   /* FOR INT I = 0 INT I< 6 I++
+    IF spriteRenderer.color.a == 1
+    THEN spriteRender.color.a = Mathf.Lerp(1, 0, 2)
+    ELSE IF spriteRenderer.color.a == 0
+    THEN spriteRender.color.a = Mathf.Lerp(1, 0, 2)
+    END IF
+    END FOR*/
+
+
+    public void PlayImmuneAnim()
+    {
+       // for (int i = 0; i < 6; i++)
+        //{
+            if(spriteRenderer.color.a == 1f)
+            {
+                decreaseAlpha = true;
+            }
+           // else if(spriteRenderer.color.a == 0f)
+           // {
+            //    decreaseAlpha = false;
+            //}
+        //}           
+
+        if(decreaseAlpha)
+        {
+            Color tempColour = spriteRenderer.color;
+            timeElapsed += Time.deltaTime;
+            tempColour.a = Mathf.Lerp(1f, 0f, timeElapsed / alphaLerpDuration);
+            spriteRenderer.color = tempColour;
+
+            if(tempColour.a <= 0f)
+            {
+                timeElapsed = 0.0f;
+                decreaseAlpha = false;
+            }
+        }
+        else
+        {
+            Color tempColour = spriteRenderer.color;
+            timeElapsed += Time.deltaTime;
+            tempColour.a = Mathf.Lerp(0f, 1f, timeElapsed / alphaLerpDuration);
+            spriteRenderer.color = tempColour;
+
+            if (tempColour.a == 1)
+            {
+                timeElapsed = 0.0f;
+                return;
+            }
+        }
     }
 }

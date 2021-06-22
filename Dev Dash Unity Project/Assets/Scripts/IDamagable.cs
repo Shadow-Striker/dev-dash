@@ -18,4 +18,6 @@ public interface IDamagable
     bool DamageImmunity { get; }
 
     void TakeDamage(int _damage);
+
+    void PlayImmuneAnim();
 }
