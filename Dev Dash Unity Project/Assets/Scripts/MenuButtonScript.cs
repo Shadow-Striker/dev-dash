@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuButtonScript : MonoBehaviour
-{
+{ 
     //Loads game scene when start button is clicked.
     public void LoadGameScene()
     {
