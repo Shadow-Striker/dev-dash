@@ -223,6 +223,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         if(collision.gameObject.tag == "AICar")
         {
             damageImmunity = true;
+            print(collision.gameObject);
         }
     }
 

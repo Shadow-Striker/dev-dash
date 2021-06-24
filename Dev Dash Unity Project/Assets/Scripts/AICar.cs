@@ -10,6 +10,7 @@ public class AICar : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField] private float speedModifier = 1f;
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private Color[] colours;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,7 @@ public class AICar : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
+        spriteRenderer.color = colours[Random.Range(0, colours.Length)];
     }
 
     // Update is called once per frame
@@ -45,6 +47,7 @@ public class AICar : MonoBehaviour
     private void OnBecameInvisible()
     {
         spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
+        spriteRenderer.color = colours[Random.Range(0, colours.Length)];
         //gameManager.NoOfCars--;
         gameObject.SetActive(false);
     }

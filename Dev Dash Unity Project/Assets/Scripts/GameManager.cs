@@ -185,6 +185,13 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void ReturnToMenuScene()
+    {
+        TogglePauseState();
+        SceneManager.LoadScene(0);
+
+    }
+
     public void TogglePauseState()
     {
         //If the game is paused and the player clicks the pause button, unpause the game.
