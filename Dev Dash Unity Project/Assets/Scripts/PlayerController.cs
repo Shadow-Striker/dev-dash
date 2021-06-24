@@ -109,6 +109,11 @@ public class PlayerController : MonoBehaviour, IDamagable
                 damageImmunity = false;
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            gameManager.TogglePauseState();
+        }
     }
 
     private void KeyboardMovement()
