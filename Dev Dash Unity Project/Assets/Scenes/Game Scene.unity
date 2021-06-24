@@ -1633,7 +1633,7 @@ MonoBehaviour:
   gameOverScreen: {fileID: 924269541}
   winScreen: {fileID: 1114177920}
   distanceLeft: 1.5
-  gameStartDelay: 3
+  gameStartDelay: 2
   startGame: 0
   noOfCars: 0
   canSpawnCar: 1
@@ -3213,7 +3213,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -723464475
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 7c9f8bcca081fac489d615410bbb4ba7, type: 3}
   m_Color: {r: 0.8207547, g: 0.36004803, b: 0.36004803, a: 1}
   m_FlipX: 0

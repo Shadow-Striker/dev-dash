@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float moveSpeed;
     [SerializeField] private float deadZone;
     [SerializeField] private int currentLaneNumber = 1;
-    [SerializeField] private bool tap, swipeLeft, swipeRight;
+    [SerializeField] private bool tap, inputLeft, inputRight;
     private bool isDragging = false;
     [SerializeField] private bool moveLeft = false;
     [SerializeField] private bool moveRight = false;
@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     public int Health { get; set; }
     
     //Can be read by other classes but not set.
-    public bool SwipeLeft { get { return swipeLeft; } }
-    public bool SwipeRight { get { return swipeRight; } }
+    public bool SwipeLeft { get { return inputLeft; } }
+    public bool SwipeRight { get { return inputRight; } }
 
     private void Start()
     {
@@ -72,7 +72,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     private void Update()
     {
         //Reset swiping left and right to false every frame.
-        swipeLeft = swipeRight = false;
+        inputLeft = inputRight = false;
+        KeyboardMovement();
         MouseCode();
         SwitchLanes();
 
@@ -110,6 +111,18 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
+    private void KeyboardMovement()
+    {
+        if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            inputLeft = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            inputRight = true;
+        }
+    }
+
     private void MouseCode()
     {
         //Stores position of the cursor when the left mouse button is clicked.
@@ -129,12 +142,12 @@ public class PlayerController : MonoBehaviour, IDamagable
             //We know the player is swiping left if the direction is negative on the x axis.
             if(moveDirection.x < 0)
             {
-                swipeLeft = true;
+                inputLeft = true;
             }
             //We know the player is swiping right if the direction is positive on the x axis.
             else if (moveDirection.x > 0)
             {
-                swipeRight = true;
+                inputRight = true;
             }
         }
     }
@@ -146,7 +159,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         //Check if the player is not on the left most lane before moving the player to the left.
         //This is to ensure the player does not go offscreen.
-        if (swipeLeft)
+        if (inputLeft)
         {
             if (currentLaneNumber != 0)
             {
@@ -156,7 +169,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
 
         //Same as above but for swiping right instead.
-        else if (swipeRight)
+        else if (inputRight)
         {
             if (currentLaneNumber != 2)
             {
