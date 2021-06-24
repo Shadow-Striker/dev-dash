@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
-    [SerializeField] private float timeLeftBtwnSpawns;
+    [SerializeField] private float timeLeftBtwnCarSpawns;
+    [SerializeField] private float timeBtwnRoadLineSpawns;
+    private float timeLeftBtwnRoadLines;
     [SerializeField] private float minTime, maxTime;
     private GameManager gameManager;
+    [SerializeField] private bool spawnCars;
 
     //Car speed can be read by other classes but it's value cannot be changed by other classes.
     [SerializeField] private float carSpeed;
@@ -26,7 +29,7 @@ public class Spawn : MonoBehaviour
     void Start()
     {
         //Set the time between car spawns to a random value.
-        timeLeftBtwnSpawns = Random.Range(minTime,maxTime);
+        timeLeftBtwnCarSpawns = Random.Range(minTime,maxTime);
         gameManager = FindObjectOfType<GameManager>();
     }
 
@@ -36,23 +39,31 @@ public class Spawn : MonoBehaviour
         //Only start spawning games once the start delay is over.
         if (gameManager.StartGame)
         {
-            SpawnCar();
+            if (spawnCars)
+            {
+                SpawnCar();
+            }
+        }
+        
+        if(!spawnCars)
+        {
+            SpawnRoadLine();
         }
     }
 
     void SpawnCar()
     {
         //Decrease time left between spawns every frame.
-        timeLeftBtwnSpawns -= Time.deltaTime;
+        timeLeftBtwnCarSpawns -= Time.deltaTime;
 
         //if timeLeftBtwnSpawns <= 0 get a inactive car from the object pool and activate it.
         //Then set timeLeftBtwnSpawns to new value.
 
-        if (timeLeftBtwnSpawns <= 0)
+        if (timeLeftBtwnCarSpawns <= 0)
         {
             if (gameManager.CanSpawnCar)
             {
-                GameObject newCar = ObjectPool.SharedInstance.GetPooledObject();
+                GameObject newCar = ObjectPool.SharedInstance.GetPooledCar();
 
                 if (newCar != null)
                 {
@@ -61,13 +72,36 @@ public class Spawn : MonoBehaviour
                     newCar.SetActive(true);
                 }
                 //gameManager.NoOfCars++;
-                timeLeftBtwnSpawns = Random.Range(minTime, maxTime + 1);
+                timeLeftBtwnCarSpawns = Random.Range(minTime, maxTime + 1);
             }
             else
             {
                 //timeLeftBtwnSpawns = Random.Range(minTime, maxTime);
                 print("Skipped spawning.");
             }
+        }
+    }
+
+    void SpawnRoadLine()
+    {
+        //Decrease time left between spawns every frame.
+        timeLeftBtwnRoadLines -= Time.deltaTime;
+
+        //if timeLeftBtwnSpawns <= 0 get a inactive car from the object pool and activate it.
+        //Then set timeLeftBtwnSpawns to new value.
+
+        if (timeLeftBtwnRoadLines <= 0)
+        {
+                GameObject newRoadLine = ObjectPool.SharedInstance.GetPooledRoadLine();
+
+                if (newRoadLine != null)
+                {
+                    newRoadLine.transform.position = transform.position;
+
+                    newRoadLine.SetActive(true);
+                }
+            //gameManager.NoOfCars++;
+            timeLeftBtwnRoadLines = timeBtwnRoadLineSpawns;
         }
     }
 

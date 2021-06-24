@@ -43,7 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60bfb786cd3246f408041e2ad098a41a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeftBtwnSpawns: 0
+  timeLeftBtwnCarSpawns: 0
+  timeBtwnRoadLineSpawns: 0.125
   minTime: 2
   maxTime: 4
+  spawnCars: 0
   carSpeed: 0

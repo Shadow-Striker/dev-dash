@@ -19,11 +19,12 @@ public class ObjectPool : MonoBehaviour
      //Single instance of object pool
     public static ObjectPool SharedInstance;
     //Stores a list of all the gameObjects that have been pre-instantiated.
-    public List<GameObject> pooledObjects;
-    public GameObject objectToPool;
+    public List<GameObject> pooledCars;
+    public List<GameObject> pooledRoadLines;
+    public GameObject[] objectToPool;
     //Number of objects to pool.
-    public int amountToPool;
-
+    public int noOfCarsToPool;
+    public int noOfRoadLinesToPool;
     private void Awake()
     {
         //Setting ObjectPool variable, (which is null on initialisation) to this script.
@@ -34,34 +35,60 @@ public class ObjectPool : MonoBehaviour
     void Start()
     {
         //Setting list of pooled objects to a new list.
-        pooledObjects = new List<GameObject>();
+        pooledCars = new List<GameObject>();
         GameObject temp;
 
 
         ///This code creates a set of pre-instantiated gameObjects to use before the game even starts.
-        //1. Instantiate a new object
+        //1. Instantiate a new car
         //2. Deactivate it for later use
-        //3. Add the new gameObject to the list of pooledObjects.
-        //4. Repeat 1 to 3 for the same amount of times as amountToPool.
-        for(int i = 0; i < amountToPool; i++)
+        //3. Add the new car to the list of pooledCars.
+        //4. Repeat 1 to 3 for the same amount of times as noOfCarsToPool.
+        for (int i = 0; i < noOfCarsToPool; i++)
         {
-            temp = Instantiate(objectToPool);
+            temp = Instantiate(objectToPool[0]);
             temp.SetActive(false);
-            pooledObjects.Add(temp);
+            pooledCars.Add(temp);
+        }
+
+
+        //1. Instantiate a new road line
+        //2. Deactivate it for later use
+        //3. Add the new car to the list of pooledRoadLines.
+        //4. Repeat 1 to 3 for the same amount of times as noOfRoadLinesToPool.
+        for (int i = 0; i < noOfRoadLinesToPool; i++)
+        {
+            temp = Instantiate(objectToPool[1]);
+            temp.SetActive(false);
+            pooledRoadLines.Add(temp);
         }
     }
 
     //This function can be called by other classes when a car needs to be spawned.
     //Replaces Unity's Instantiate function.
-    public GameObject GetPooledObject()
+    public GameObject GetPooledCar()
     {
-        for(int i = 0; i < amountToPool; i++)
+        for(int i = 0; i < noOfCarsToPool; i++)
         {
             //Only return cars that are not currently being used.
             //else return null.
-            if (!pooledObjects[i].activeInHierarchy)
+            if (!pooledCars[i].activeInHierarchy)
             {
-                return pooledObjects[i];
+                return pooledCars[i];
+            }
+        }
+        return null;
+    }
+
+    public GameObject GetPooledRoadLine()
+    {
+        for (int i = 0; i < noOfRoadLinesToPool; i++)
+        {
+            //Only return cars that are not currently being used.
+            //else return null.
+            if (!pooledRoadLines[i].activeInHierarchy)
+            {
+                return pooledRoadLines[i];
             }
         }
         return null;

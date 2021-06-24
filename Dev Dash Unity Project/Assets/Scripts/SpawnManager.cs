@@ -57,7 +57,7 @@ public class SpawnManager : MonoBehaviour
             {
                 int listItemNumber = Random.Range(0, tempList.Count);
                 Vector3 newSpawnPos = tempList[listItemNumber].position;
-                GameObject newCar = ObjectPool.SharedInstance.GetPooledObject();
+                GameObject newCar = ObjectPool.SharedInstance.GetPooledCar();
 
                 if (newCar != null)
                 {
