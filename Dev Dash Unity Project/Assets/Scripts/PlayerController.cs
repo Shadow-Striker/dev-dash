@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float deadZone;
     [SerializeField] private int currentLaneNumber = 1;
     [SerializeField] private bool tap, inputLeft, inputRight;
+    [SerializeField] private bool freezeFrames;
+    [SerializeField] private int frameCount = 0;
     private bool isDragging = false;
     [SerializeField] private bool moveLeft = false;
     [SerializeField] private bool moveRight = false;
@@ -120,10 +122,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
+            freezeFrames = true;
             inputLeft = true;
         }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
+            freezeFrames = true;
             inputRight = true;
         }
     }
@@ -262,10 +266,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             Color tempColour = spriteRenderer.color;
             timeElapsed += Time.deltaTime;
-            tempColour.a = Mathf.Lerp(1f, 0f, timeElapsed / alphaLerpDuration);
+            tempColour.a = Mathf.Lerp(1f, 0.4f, timeElapsed / alphaLerpDuration);
             spriteRenderer.color = tempColour;
 
-            if(tempColour.a <= 0f)
+            if(tempColour.a <= 0.4f)
             {
                 timeElapsed = 0.0f;
                 decreaseAlpha = false;
@@ -275,13 +279,31 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             Color tempColour = spriteRenderer.color;
             timeElapsed += Time.deltaTime;
-            tempColour.a = Mathf.Lerp(0f, 1f, timeElapsed / alphaLerpDuration);
+            tempColour.a = Mathf.Lerp(0.4f, 1f, timeElapsed / alphaLerpDuration);
             spriteRenderer.color = tempColour;
 
             if (tempColour.a == 1)
             {
                 timeElapsed = 0.0f;
                 return;
+            }
+        }
+    }
+
+    private void FreezeFraming()
+    {
+        if (freezeFrames)
+        {
+            if (frameCount < 4)
+            {
+                Time.timeScale = 0f;
+                frameCount += 1;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                frameCount = 0;
+                freezeFrames = false;
             }
         }
     }
