@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private SpriteRenderer spriteRenderer;
+    private CameraShake cameraShake;
     private GameManager gameManager;
     [SerializeField] private bool damageImmunity;
     [SerializeField] private float damageImmuneTime;
@@ -29,7 +30,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     private static float timeElapsed = 0.0f;
     [SerializeField] private float alphaLerpDuration = 2f;
     public Vector3 mousePos;
-
+    [SerializeField] private AudioSource dashSFXAudioSource;
+    [SerializeField] private ParticleSystem burstParticles;
+    [SerializeField] private AudioClip dashSFX;
+    private bool playDashSound = false;
     //These variables are from the IDamagable interface.
     public int StartingHealth
     {
@@ -67,6 +71,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
+        cameraShake = FindObjectOfType<CameraShake>();
         Health = startingHealth;
         damageImmuneTimeLeft = damageImmuneTime;
     }
@@ -95,6 +100,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             LaneMovement();
         }
+
         
         //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
         //Decrease damageImmuneTimeLeft by 1 every frame
@@ -121,14 +127,16 @@ public class PlayerController : MonoBehaviour, IDamagable
     private void KeyboardMovement()
     {
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
+        { 
             freezeFrames = true;
             inputLeft = true;
+            //dashSFX.Play();
         }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             freezeFrames = true;
             inputRight = true;
+            //dashSFX.Play();
         }
     }
 
@@ -172,8 +180,11 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             if (currentLaneNumber != 0)
             {
+                cameraShake.CamShake();
+                burstParticles.Play();             
                 startingPos = transform.position;
                 moveLeft = true;
+                playDashSound = true;
             }
         }
 
@@ -182,6 +193,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             if (currentLaneNumber != 2)
             {
+                cameraShake.CamShake();
+                burstParticles.Play();
                 startingPos = transform.position;
                 moveRight = true;
             }
