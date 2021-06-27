@@ -11,10 +11,10 @@ public class AICar : MonoBehaviour
     [SerializeField] private float speedModifier = 1f;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private Color[] colours;
+    [SerializeField] private bool isVisible = false;
     // Start is called before the first frame update
     void Start()
     {
-        print("AI CAR CALLED");
         gameManager = FindObjectOfType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -46,10 +46,18 @@ public class AICar : MonoBehaviour
     //Deactivates car once it is no longer visible by the camera.
     private void OnBecameInvisible()
     {
+        if (transform.position.y > Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y) return;
+        isVisible = false;
         spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
         spriteRenderer.color = colours[Random.Range(0, colours.Length)];
         //gameManager.NoOfCars--;
         gameObject.SetActive(false);
+        print("Car has gone off bottom of screen.");
+    }
+
+    private void OnBecameVisible()
+    {
+        isVisible = true;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -72,9 +80,16 @@ public class AICar : MonoBehaviour
             gameManager.NoOfCars++;
         }
 
+        if (collision.gameObject.tag == "TwoCarsOnlyArea" && gameManager.NoOfCars > 2 && !isVisible)
+        {
+            print("(DEACTIVATING BTW) NO. OF CARS LOL: " + gameManager.NoOfCars);
+            //gameManager.NoOfCars--;
+            //gameObject.SetActive(false);
+        }
+
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    /*private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "TwoCarsOnlyArea" && gameManager.NoOfCars > 2)
         {
@@ -82,7 +97,7 @@ public class AICar : MonoBehaviour
             gameManager.NoOfCars--;
             gameObject.SetActive(false);
         }
-    }
+    }*/
 
     private void OnTriggerExit2D(Collider2D collision)
     {

@@ -74,11 +74,6 @@ public class Spawn : MonoBehaviour
                 //gameManager.NoOfCars++;
                 timeLeftBtwnCarSpawns = Random.Range(minTime, maxTime + 1);
             }
-            else
-            {
-                //timeLeftBtwnSpawns = Random.Range(minTime, maxTime);
-                print("Skipped spawning.");
-            }
         }
     }
 

@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float alphaLerpDuration = 2f;
     public Vector3 mousePos;
     [SerializeField] private AudioSource dashSFXAudioSource;
+    [SerializeField] private ParticleSystem dashParticles;
     [SerializeField] private ParticleSystem burstParticles;
     [SerializeField] private AudioClip dashSFX;
     private bool playDashSound = false;
@@ -130,13 +131,11 @@ public class PlayerController : MonoBehaviour, IDamagable
         { 
             freezeFrames = true;
             inputLeft = true;
-            //dashSFX.Play();
         }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             freezeFrames = true;
             inputRight = true;
-            //dashSFX.Play();
         }
     }
 
@@ -180,8 +179,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             if (currentLaneNumber != 0)
             {
-                cameraShake.CamShake();
-                burstParticles.Play();             
+                dashParticles.Play();
+                float randFloat = Random.Range(0.8f, 1.1f);
+                dashSFXAudioSource.pitch = randFloat;
+                dashSFXAudioSource.Play();
                 startingPos = transform.position;
                 moveLeft = true;
                 playDashSound = true;
@@ -193,8 +194,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             if (currentLaneNumber != 2)
             {
-                cameraShake.CamShake();
-                burstParticles.Play();
+                dashParticles.Play();
+                float randFloat = Random.Range(.75f, 1.2f);
+                dashSFXAudioSource.pitch = randFloat;
+                dashSFXAudioSource.Play();
                 startingPos = transform.position;
                 moveRight = true;
             }
@@ -214,6 +217,13 @@ public class PlayerController : MonoBehaviour, IDamagable
             //i.e if the player has gone further than they need to, reset the player's position.
             if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
             {
+                if (cameraShake != null)
+                {
+                    //cameraShake.CamShake();
+                    
+                }
+                burstParticles.transform.position -= new Vector3(.5f, 0f, 0f);
+                burstParticles.Play();
                 transform.position = new Vector2(lanePositions[currentLaneNumber - 1].x, transform.position.y);
                 currentLaneNumber -= 1;
                 moveLeft = false;
@@ -227,6 +237,12 @@ public class PlayerController : MonoBehaviour, IDamagable
             transform.position += Vector3.right * moveSpeed * Time.deltaTime;
             if (transform.position.x >= lanePositions[currentLaneNumber + 1].x)
             {
+                if (cameraShake != null)
+                {
+                    //cameraShake.CamShake();
+                }
+                burstParticles.transform.position += new Vector3(.5f, 0f, 0f);
+                burstParticles.Play();
                 transform.position = new Vector2(lanePositions[currentLaneNumber + 1].x,transform.position.y);
                 currentLaneNumber += 1;
                 moveRight = false;
@@ -237,9 +253,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //If player collides with AI Car, set damageImmunity to true.
-        if(collision.gameObject.tag == "AICar")
+        if(collision.gameObject.tag == "AICar" && !damageImmunity)
         {
             damageImmunity = true;
+            cameraShake.CamShake();
             print(collision.gameObject);
         }
     }
