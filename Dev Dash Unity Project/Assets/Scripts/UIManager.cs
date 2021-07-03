@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text healthText;
     [SerializeField] private Text distanceText;
     [SerializeField] private Text pauseText;
+    [SerializeField] private Text carsPassedText;
 
     private PlayerController playerController;
     [SerializeField] private GameObject gameOverScreen;
@@ -30,8 +32,8 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         //Update texts every frame.
-        healthText.text = "Health: " + playerController.Health;
-        distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft.ToString("F2") + " miles";
+        healthText.text = "HEALTH: " + playerController.Health;
+        distanceText.text = gameManager.DistanceLeft.ToString("F2") + " MILES LEFT";
 
         //Display win screen if player has won.
         if (gameManager.HasWonGame)
@@ -61,11 +63,15 @@ public class UIManager : MonoBehaviour
     private void DisplayGameOverScreen()
     {
         gameOverScreen.SetActive(true);
+        carsPassedText.gameObject.SetActive(true);
+        carsPassedText.text = "CARS PASSED: " + gameManager.CarsPassed;
     }
 
     private void DisplayWinScreen()
     {
         winScreen.SetActive(true);
+        carsPassedText.gameObject.SetActive(true);
+        carsPassedText.text = "CARS PASSED: " + gameManager.CarsPassed;
     }
 
     //Disables or enables pause screen based on gameManager's pause state.

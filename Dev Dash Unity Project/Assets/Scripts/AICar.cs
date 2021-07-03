@@ -11,15 +11,19 @@ public class AICar : MonoBehaviour
     [SerializeField] private float speedModifier = 1f;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private Color[] colours;
-    [SerializeField] private bool isVisible = false;
+    [SerializeField] private bool isVisible = true;
+    [SerializeField] private float disableDelay = 1f;
+    [SerializeField] private float disableDelayLeft;
+    [SerializeField] private bool isInSpawnArea = true;
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
         spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
         spriteRenderer.color = colours[Random.Range(0, colours.Length)];
+        disableDelayLeft = disableDelay;
     }
 
     // Update is called once per frame
@@ -32,27 +36,41 @@ public class AICar : MonoBehaviour
         if (!gameManager.HasWonGame)
         {
             Movement();
-           // if (speed < 8.5f)
-                //speed += 0.002f;
+            // if (speed < 8.5f)
+            //speed += 0.002f;
         }
+
+        if (!isVisible)
+        {
+            disableDelayLeft -= Time.deltaTime;
+
+            if (disableDelayLeft <= 0)
+            {
+                disableDelayLeft = disableDelay;
+                isVisible = true;
+                gameObject.SetActive(false);
+            }
+
+        }
+
     }
 
     //Moves car downwards every frame.
     void Movement()
-    { 
+    {
         transform.position += gameManager.CarSpeed * speedModifier * direction.normalized * Time.deltaTime;
     }
 
     //Deactivates car once it is no longer visible by the camera.
+    //OnBecameInvisble & OnBecameVisible are only called once.
     private void OnBecameInvisible()
     {
-        if (transform.position.y > Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y) return;
+        if (isInSpawnArea) return;
         isVisible = false;
         spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
         spriteRenderer.color = colours[Random.Range(0, colours.Length)];
         //gameManager.NoOfCars--;
-        gameObject.SetActive(false);
-        print("Car has gone off bottom of screen.");
+        print("Car is invisible.");
     }
 
     private void OnBecameVisible()
@@ -77,6 +95,7 @@ public class AICar : MonoBehaviour
 
         if (collision.gameObject.tag == "TwoCarsOnlyArea")
         {
+            isInSpawnArea = true;
             gameManager.NoOfCars++;
         }
 
@@ -103,6 +122,7 @@ public class AICar : MonoBehaviour
     {
         if (collision.gameObject.tag == "TwoCarsOnlyArea")
         {
+            isInSpawnArea = false;
             gameManager.NoOfCars--;
         }
     }

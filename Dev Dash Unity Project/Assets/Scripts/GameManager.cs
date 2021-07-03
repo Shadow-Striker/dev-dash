@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool canSpawnCar = true;
     [SerializeField] private float carSpeed = 4;
     [SerializeField] private float maxCarSpeed = 4;
-
+    [SerializeField] private int carsPassed;
     //Allows other classes to get these variables but not set it.
     //This is to prevent other classes from accidently changing the variable values
     public bool StartGame
@@ -119,6 +119,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int CarsPassed
+    {
+        get
+        {
+            return carsPassed;
+        }
+        set
+        {
+            carsPassed = value;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -170,6 +182,11 @@ public class GameManager : MonoBehaviour
         if(noOfCars < 0)
         {
             noOfCars = 0;
+        }
+
+        if(isGameOver || hasWonGame)
+        {
+            canSpawnCar = false;
         }
 
         if (startGame && carSpeed < maxCarSpeed)

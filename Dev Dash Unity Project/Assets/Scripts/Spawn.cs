@@ -7,6 +7,8 @@ public class Spawn : MonoBehaviour
     [SerializeField] private float timeLeftBtwnCarSpawns;
     [SerializeField] private float timeBtwnRoadLineSpawns;
     private float timeLeftBtwnRoadLines;
+    //time between road line = 0.125
+    //Current minTime = 2, maxTime = 4
     [SerializeField] private float minTime, maxTime;
     private GameManager gameManager;
     [SerializeField] private bool spawnCars;
@@ -70,6 +72,7 @@ public class Spawn : MonoBehaviour
                     newCar.transform.position = transform.position;
 
                     newCar.SetActive(true);
+                    gameManager.CarsPassed++;
                 }
                 //gameManager.NoOfCars++;
                 timeLeftBtwnCarSpawns = Random.Range(minTime, maxTime + 1);

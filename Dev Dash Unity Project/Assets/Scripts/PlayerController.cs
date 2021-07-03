@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private SpriteRenderer spriteRenderer;
-    private CameraShake cameraShake;
+    private CameraController cameraController;
     private GameManager gameManager;
     [SerializeField] private bool damageImmunity;
     [SerializeField] private float damageImmuneTime;
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float deadZone;
     [SerializeField] private int currentLaneNumber = 1;
     [SerializeField] private bool tap, inputLeft, inputRight;
-    [SerializeField] private bool freezeFrames;
+    [SerializeField] private bool freezeFrames = false;
     [SerializeField] private int frameCount = 0;
     private bool isDragging = false;
     [SerializeField] private bool moveLeft = false;
@@ -72,7 +72,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
-        cameraShake = FindObjectOfType<CameraShake>();
+        cameraController = FindObjectOfType<CameraController>();
+        print(cameraController);
         Health = startingHealth;
         damageImmuneTimeLeft = damageImmuneTime;
     }
@@ -102,6 +103,8 @@ public class PlayerController : MonoBehaviour, IDamagable
             LaneMovement();
         }
 
+        if (freezeFrames) FreezeFraming();
+
         
         //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
         //Decrease damageImmuneTimeLeft by 1 every frame
@@ -129,12 +132,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         { 
-            freezeFrames = true;
             inputLeft = true;
         }
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            freezeFrames = true;
             inputRight = true;
         }
     }
@@ -213,18 +214,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             //Move player to the left.
             transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+            cameraController.MoveLeft();
             //If the player's position is <= to the lane that they were supposed to be moving to,
             //i.e if the player has gone further than they need to, reset the player's position.
             if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
-            {
-                if (cameraShake != null)
-                {
-                    //cameraShake.CamShake();
-                    
-                }
+            { 
+
                 burstParticles.transform.position -= new Vector3(.5f, 0f, 0f);
                 burstParticles.Play();
                 transform.position = new Vector2(lanePositions[currentLaneNumber - 1].x, transform.position.y);
+                //cameraController.transform.position = new Vector3(lanePositions[currentLaneNumber - 1].x, cameraController.transform.position.y, cameraController.transform.position.z);
                 currentLaneNumber -= 1;
                 moveLeft = false;
             }
@@ -235,15 +234,14 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (moveRight)
         {
             transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+            cameraController.MoveRight();
             if (transform.position.x >= lanePositions[currentLaneNumber + 1].x)
             {
-                if (cameraShake != null)
-                {
-                    //cameraShake.CamShake();
-                }
+
                 burstParticles.transform.position += new Vector3(.5f, 0f, 0f);
                 burstParticles.Play();
                 transform.position = new Vector2(lanePositions[currentLaneNumber + 1].x,transform.position.y);
+                //cameraController.transform.position = new Vector3(lanePositions[currentLaneNumber + 1].x, cameraController.transform.position.y, cameraController.transform.position.z);
                 currentLaneNumber += 1;
                 moveRight = false;
             }
@@ -256,7 +254,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         if(collision.gameObject.tag == "AICar" && !damageImmunity)
         {
             damageImmunity = true;
-            cameraShake.CamShake();
+            cameraController.CamShake();
+            freezeFrames = true;
             print(collision.gameObject);
         }
     }
@@ -324,7 +323,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if (freezeFrames)
         {
-            if (frameCount < 4)
+            if (frameCount < 10)
             {
                 Time.timeScale = 0f;
                 frameCount += 1;
