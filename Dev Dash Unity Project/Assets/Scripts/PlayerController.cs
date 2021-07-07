@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private ParticleSystem burstParticles;
     [SerializeField] private AudioClip dashSFX;
     private bool playDashSound = false;
+    [SerializeField] private float switchLaneDelayLeft;
+    [SerializeField] private float switchLaneDelay;
+    [SerializeField] private bool startDelay = false;
     //These variables are from the IDamagable interface.
     public int StartingHealth
     {
@@ -105,11 +108,20 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (freezeFrames) FreezeFraming();
 
-        
+        if (startDelay)
+        {
+            switchLaneDelayLeft -= Time.deltaTime;
+        }
+        if (switchLaneDelayLeft <= 0)
+        {
+            switchLaneDelayLeft = switchLaneDelay;
+            startDelay = false;
+        }
+
         //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
         //Decrease damageImmuneTimeLeft by 1 every frame
         //Else reset damageImmuneTimeLeft and set damageImmunity to false.
-        if(damageImmunity)
+        if (damageImmunity)
         {
             if (damageImmuneTimeLeft > 0)
             {
@@ -169,6 +181,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
+
+    //Prepare to switch lanes
     private void SwitchLanes()
     {
         //Don't move the player to another lane if they are currently doing so.
@@ -205,10 +219,11 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
+    //Actually switches between the lanes.
     private void LaneMovement()
     {
         //Don't execute this function if the player has won/lost.
-        if (gameManager.IsGameOver == true || gameManager.HasWonGame == true) return;
+        if (gameManager.IsGameOver == true || gameManager.HasWonGame == true || startDelay) return;
 
         if (moveLeft)
         {
@@ -226,6 +241,7 @@ public class PlayerController : MonoBehaviour, IDamagable
                 //cameraController.transform.position = new Vector3(lanePositions[currentLaneNumber - 1].x, cameraController.transform.position.y, cameraController.transform.position.z);
                 currentLaneNumber -= 1;
                 moveLeft = false;
+                startDelay = true;
             }
         }
 
@@ -244,6 +260,7 @@ public class PlayerController : MonoBehaviour, IDamagable
                 //cameraController.transform.position = new Vector3(lanePositions[currentLaneNumber + 1].x, cameraController.transform.position.y, cameraController.transform.position.z);
                 currentLaneNumber += 1;
                 moveRight = false;
+                startDelay = true;
             }
         }
     }

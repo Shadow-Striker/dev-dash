@@ -8,12 +8,13 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float leftPosMax;
     [SerializeField] private float rightPosMax;
     [SerializeField] private float moveSpeed;
+    private SettingsManager settingsManager;
     public bool camMoveLeft = false;
     public bool camMoveRight = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        settingsManager = FindObjectOfType<SettingsManager>();
     }
 
     // Update is called once per frame
@@ -24,7 +25,10 @@ public class CameraController : MonoBehaviour
 
     public void CamShake()
     {
-        camAnim.SetTrigger("shake");
+        if(settingsManager != null && settingsManager.ScreenShake)
+        {
+            camAnim.SetTrigger("shake");
+        }
     }
 
     public void MoveLeft()
