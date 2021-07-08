@@ -205,7 +205,7 @@ public class GameManager : MonoBehaviour
     public void ReturnToMenuScene()
     {
         TogglePauseState();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
 
     }
 

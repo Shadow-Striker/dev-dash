@@ -272,7 +272,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             damageImmunity = true;
             cameraController.CamShake();
-            freezeFrames = true;
+            //freezeFrames = true;
             print(collision.gameObject);
         }
     }

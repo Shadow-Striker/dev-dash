@@ -13,10 +13,16 @@ public class MenuMusicPlayer : MonoBehaviour
     {
         //Checks if a music player already exists.
         //If it does destroy so there are not multiple music players.
-        if (instance != null)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        else
+        {
+            instance = this;
+        }
+
 
         DontDestroyOnLoad(gameObject);
     }

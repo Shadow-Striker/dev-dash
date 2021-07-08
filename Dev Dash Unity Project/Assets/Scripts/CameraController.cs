@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
 
     public void CamShake()
     {
-        if(settingsManager != null && settingsManager.ScreenShake)
+        if(settingsManager != null && SettingsManager.Instance.ScreenShake)
         {
             camAnim.SetTrigger("shake");
         }

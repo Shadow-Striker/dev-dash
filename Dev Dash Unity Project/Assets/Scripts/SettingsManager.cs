@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
 {
-    private static SettingsManager instance;
-    private static bool screenShake;
+    private static SettingsManager instance = null;
+
+    public static SettingsManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+    
+    [SerializeField] private bool screenShake;
     
     public bool ScreenShake
     {
@@ -25,12 +34,17 @@ public class SettingsManager : MonoBehaviour
     {
         //Checks if a music player already exists.
         //If it does destroy so there are not multiple music players.
-        if (instance != null)
+        if (instance != null && instance != this)
         {
-            Destroy(gameObject);
+            print("Destroy settingsManager");
+            //Destroy(gameObject);
+            return;
         }
-
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     public void ToggleScreenShake(bool _screenShake)
