@@ -820,7 +820,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e65cb3b24b034f3418d3f12c3069ffe0, type: 3}
-    m_FontSize: 33
+    m_FontSize: 36
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
@@ -831,7 +831,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A CAR DODGING GAME
+  m_Text: "A FAST-PACED \nCAR DODGING GAME!"
 --- !u!222 &1606471922
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -856,8 +856,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.016014, y: 176.4}
-  m_SizeDelta: {x: 435.00116, y: 44.283203}
+  m_AnchoredPosition: {x: 0.0000038147, y: 159}
+  m_SizeDelta: {x: 621.59625, y: 113.396484}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1631866004
 GameObject:

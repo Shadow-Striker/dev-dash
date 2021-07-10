@@ -108,7 +108,7 @@ public class AICar : MonoBehaviour
 
     }
 
-    /*private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "TwoCarsOnlyArea" && gameManager.NoOfCars > 2)
         {
@@ -116,7 +116,7 @@ public class AICar : MonoBehaviour
             gameManager.NoOfCars--;
             gameObject.SetActive(false);
         }
-    }*/
+    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {

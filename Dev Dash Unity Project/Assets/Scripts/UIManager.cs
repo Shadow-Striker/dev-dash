@@ -24,16 +24,16 @@ public class UIManager : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
         gameManager = FindObjectOfType<GameManager>();
         //Set health text to display player's starting health.
-        healthText.text = "Health : " + playerController.StartingHealth;
-        distanceText.text = "Distance Left: \n" + gameManager.DistanceLeft + " miles";
+        healthText.text = playerController.StartingHealth.ToString();
+        distanceText.text = gameManager.DistanceLeft + " miles";
     }
 
     // Update is called once per frame
     void Update()
     {
         //Update texts every frame.
-        healthText.text = "HEALTH: " + playerController.Health;
-        distanceText.text = gameManager.DistanceLeft.ToString("F2") + " MILES LEFT";
+        healthText.text = playerController.Health.ToString();
+        distanceText.text = gameManager.DistanceLeft.ToString("F2") + " miles";
 
         //Display win screen if player has won.
         if (gameManager.HasWonGame)

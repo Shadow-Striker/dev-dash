@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private SpriteRenderer spriteRenderer;
     private CameraController cameraController;
     private GameManager gameManager;
+    [SerializeField] private Sprite[] sprites;
     [SerializeField] private bool damageImmunity;
     [SerializeField] private float damageImmuneTime;
     [SerializeField] private float damageImmuneTimeLeft;
@@ -38,6 +39,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float switchLaneDelayLeft;
     [SerializeField] private float switchLaneDelay;
     [SerializeField] private bool startDelay = false;
+    [SerializeField] private float flashTimeLeft;
+    [SerializeField] private float flashTime;
+    [SerializeField] private bool startFlash = false;
     //These variables are from the IDamagable interface.
     public int StartingHealth
     {
@@ -351,6 +355,19 @@ public class PlayerController : MonoBehaviour, IDamagable
                 frameCount = 0;
                 freezeFrames = false;
             }
+        }
+    }
+
+    private void HitFlash()
+    {
+        spriteRenderer.sprite = sprites[1];
+        flashTimeLeft -= Time.deltaTime;
+
+        if(flashTimeLeft <= 0)
+        {
+            spriteRenderer.sprite = sprites[0];
+            flashTimeLeft = flashTime;
+            startFlash = false;
         }
     }
 }
