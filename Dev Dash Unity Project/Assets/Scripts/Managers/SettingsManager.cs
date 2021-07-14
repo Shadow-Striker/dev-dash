@@ -34,6 +34,8 @@ public class SettingsManager : MonoBehaviour
 
     private void Awake()
     {
+        //SceneManager.sceneLoaded += this.OnLoadCallback;
+        
         //Checks if a music player already exists.
         //If it does destroy so there are not multiple music players.
         screenShakeToggle = FindObjectOfType<Toggle>();
@@ -61,26 +63,37 @@ public class SettingsManager : MonoBehaviour
             this.screenShake = instance.screenShake;
             Destroy(instance.gameObject);
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(instance.gameObject);
         }
 
         DontDestroyOnLoad(gameObject);
     }
 
-
-    private void OnLevelWasLoaded(int level)
-    {
-        if(level == 1)
-        screenShakeToggle = FindObjectOfType<Toggle>();
-        screenShakeToggle.onValueChanged.AddListener(delegate { ToggleScreenShake(screenShakeToggle.isOn); });
-        // screenShakeToggle.
-        screenShakeToggle.isOn = screenShake;
-    }
-
+    #region DEPRECIATED CODE
+     private void OnLevelWasLoaded(int level)
+     {
+         if(level == 1)
+         screenShakeToggle = FindObjectOfType<Toggle>();
+         screenShakeToggle.onValueChanged.AddListener(delegate { ToggleScreenShake(screenShakeToggle.isOn); });
+         // screenShakeToggle.
+         screenShakeToggle.isOn = screenShake;
+     }
+    #endregion
 
     public void ToggleScreenShake(bool _screenShake)
     {
         screenShake = _screenShake;
     }
+
+  /*
+   private void OnLoadCallback(Scene scene, LoadSceneMode sceneMode)
+    {
+        //If scene = menu scene, find screen shake toggle. 
+        if (scene.buildIndex == 1)
+            screenShakeToggle = FindObjectOfType<Toggle>();
+        screenShakeToggle.onValueChanged.AddListener(delegate { ToggleScreenShake(screenShakeToggle.isOn); });
+        // screenShakeToggle.
+        screenShakeToggle.isOn = screenShake;
+    }*/
 
 }

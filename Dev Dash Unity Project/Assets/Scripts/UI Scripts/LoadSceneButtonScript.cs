@@ -7,6 +7,7 @@ public class LoadSceneButtonScript : MonoBehaviour
 {
     [SerializeField] private GameObject creditsScreen;
     [SerializeField] private GameObject menuScreen;
+    [SerializeField] private GameObject socialScreen;
     //Loads game scene when start button is clicked.
     public void LoadGameScene(int _buildIndex)
     {
@@ -19,6 +20,15 @@ public class LoadSceneButtonScript : MonoBehaviour
         bool menuBool = menuScreen.activeSelf;
 
         creditsScreen.SetActive(!creditsBool);
+        menuScreen.SetActive(!menuBool);
+    }
+
+    public void ToggleSocialScreen()
+    {
+        bool socialBool = socialScreen.activeSelf;
+        bool menuBool = menuScreen.activeSelf;
+
+        socialScreen.SetActive(!socialBool);
         menuScreen.SetActive(!menuBool);
     }
 }
