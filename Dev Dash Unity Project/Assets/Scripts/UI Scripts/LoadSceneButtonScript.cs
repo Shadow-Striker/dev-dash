@@ -8,6 +8,9 @@ public class LoadSceneButtonScript : MonoBehaviour
     [SerializeField] private GameObject creditsScreen;
     [SerializeField] private GameObject menuScreen;
     [SerializeField] private GameObject socialScreen;
+    [SerializeField] private float targetX;
+    private float velocity = 0.0f;
+    [SerializeField] private float smoothTime = 0.3f;
     //Loads game scene when start button is clicked.
     public void LoadGameScene(int _buildIndex)
     {

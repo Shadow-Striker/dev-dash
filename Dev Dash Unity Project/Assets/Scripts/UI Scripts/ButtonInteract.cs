@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private float timeElapsed;
     private AudioSource audioSource;
@@ -12,7 +12,7 @@ public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] private bool startEnlargeAnim = false;
     [SerializeField] private bool startShrinkAnim = false;
     private Vector3 startingScale;
-    private enum States {idleState, shrinkState, enlargeState};
+    private enum States { idleState, shrinkState, enlargeState };
     [SerializeField] private States currentState;
 
 
@@ -26,10 +26,10 @@ public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     // Update is called once per frame
     void Update()
     {
-       // if(startEnlargeAnim && !startShrinkAnim)
-      //  {
-      //      PlayEnlargeAnim();
-       // }
+        // if(startEnlargeAnim && !startShrinkAnim)
+        //  {
+        //      PlayEnlargeAnim();
+        // }
 
         switch (currentState)
         {
@@ -46,10 +46,10 @@ public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
 
 
-       // if (startShrinkAnim && !startEnlargeAnim)
-      //  {
+        // if (startShrinkAnim && !startEnlargeAnim)
+        //  {
         //    PlayShrinkAnim();
-       // }
+        // }
     }
 
     private void PlayEnlargeAnim()
@@ -57,7 +57,7 @@ public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         timeElapsed += Time.deltaTime;
         transform.localScale = Vector3.Lerp(startingScale, startingScale * scaleMultiplier, timeElapsed / scaleLerpDuration);
 
-        if(transform.localScale.x >= startingScale.x * scaleMultiplier)
+        if (transform.localScale.x >= startingScale.x * scaleMultiplier)
         {
             timeElapsed = 0f;
             currentState = States.idleState;
@@ -95,14 +95,14 @@ public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         print("Exited button");
     }
 
-    public void OnPointerClick(PointerEventData pointerEventData)
+    /*public void OnPointerClick(PointerEventData pointerEventData)
     {
         if(pointerEventData.button == PointerEventData.InputButton.Left)
         {
             print("Button clicked");
             currentState = States.shrinkState;
         }
-    }
+    }*/
 
     //OnPointerDown is also required to receive OnPointerUp callbacks
     public void OnPointerDown(PointerEventData pointerEventData)
@@ -121,10 +121,5 @@ public class ButtonInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             currentState = States.idleState;
         }
-    }
-
-    public void OnMouseDown()
-    {
-        
     }
 }

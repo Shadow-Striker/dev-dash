@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float flashTimeLeft;
     [SerializeField] private float flashTime;
     [SerializeField] private bool startFlash = false;
+    private Color startingColour;
     //These variables are from the IDamagable interface.
     public int StartingHealth
     {
@@ -83,6 +84,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         print(cameraController);
         Health = startingHealth;
         damageImmuneTimeLeft = damageImmuneTime;
+        startingColour = spriteRenderer.color;
+        flashTimeLeft = flashTime;
     }
 
     private void Update()
@@ -120,6 +123,11 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             switchLaneDelayLeft = switchLaneDelay;
             startDelay = false;
+        }
+
+        if(startFlash)
+        {
+            //HitFlash();
         }
 
         //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
@@ -274,6 +282,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         //If player collides with AI Car, set damageImmunity to true.
         if(collision.gameObject.tag == "AICar" && !damageImmunity)
         {
+            startFlash = true;
             damageImmunity = true;
             cameraController.CamShake();
             //freezeFrames = true;
@@ -361,12 +370,15 @@ public class PlayerController : MonoBehaviour, IDamagable
     private void HitFlash()
     {
         spriteRenderer.sprite = sprites[1];
+        spriteRenderer.color = Color.white;
         flashTimeLeft -= Time.deltaTime;
 
-        if(flashTimeLeft <= 0)
+        if (flashTimeLeft <= 0)
         {
+            spriteRenderer.color = startingColour;
             spriteRenderer.sprite = sprites[0];
             flashTimeLeft = flashTime;
+            timeElapsed = 0f;
             startFlash = false;
         }
     }
