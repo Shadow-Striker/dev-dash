@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
     public void ReloadGameScene()
     {
         TogglePauseState();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(2);
         
     }
 
