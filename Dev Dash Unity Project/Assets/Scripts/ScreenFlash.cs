@@ -36,15 +36,9 @@ public class ScreenFlash : MonoBehaviour
         if (image.color.a < maxAlpha && !decreaseAlpha)
         {
             Color tempColour = image.color;
-            timeElapsed += Time.deltaTime;
-            tempColour.a = Mathf.Lerp(0f, maxAlpha, timeElapsed / alphaLerpDuration);
-            image.color = tempColour;
-
-            if(image.color.a >= maxAlpha)
-            {
-                timeElapsed = 0.0f;
-                decreaseAlpha = true;
-            }
+            //timeElapsed += Time.deltaTime;
+            tempColour.a = maxAlpha;
+            decreaseAlpha = true;
         }
         else if(decreaseAlpha)
         {
@@ -57,6 +51,7 @@ public class ScreenFlash : MonoBehaviour
             {
                 decreaseAlpha = false;
                 startScreenFlash = false;
+                timeElapsed = 0f;
             }
         }
     }

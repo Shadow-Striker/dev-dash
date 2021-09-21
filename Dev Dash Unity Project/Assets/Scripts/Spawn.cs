@@ -38,7 +38,7 @@ public class Spawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Only start spawning games once the start delay is over.
+        //Only start spawning cars once the start delay is over.
         if (gameManager.StartGame)
         {
             if (spawnCars)
