@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject winScreen;
     [SerializeField] private GameObject pauseScreen;
     private GameManager gameManager;
-
+   
     // Start is called before the first frame update
     void Start()
     {

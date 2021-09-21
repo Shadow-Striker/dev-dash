@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private SpriteRenderer spriteRenderer;
     private CameraController cameraController;
     private GameManager gameManager;
+    private ScreenFlash screenFlash;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private bool damageImmunity;
     [SerializeField] private float damageImmuneTime;
@@ -80,6 +81,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
+        screenFlash = FindObjectOfType<ScreenFlash>();
         cameraController = FindObjectOfType<CameraController>();
         print(cameraController);
         Health = startingHealth;
@@ -295,7 +297,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if(Health > 0)
         Health -= _damage;
-
+        if (!screenFlash.startScreenFlash)
+        {
+            screenFlash.startScreenFlash = true;
+        }
     }
 
    /* FOR INT I = 0 INT I< 6 I++
