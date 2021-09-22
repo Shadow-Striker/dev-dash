@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private SpriteRenderer spriteRenderer;
-    private CameraController cameraController;
     private GameManager gameManager;
     private ScreenFlash screenFlash;
     [SerializeField] private Sprite[] sprites;
@@ -32,10 +31,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     private static float timeElapsed = 0.0f;
     [SerializeField] private float alphaLerpDuration = 2f;
     public Vector3 mousePos;
-    [SerializeField] private AudioSource dashSFXAudioSource;
     [SerializeField] private ParticleSystem dashParticles;
     [SerializeField] private ParticleSystem burstParticles;
-    [SerializeField] private AudioClip dashSFX;
     private bool playDashSound = false;
     [SerializeField] private float switchLaneDelayLeft;
     [SerializeField] private float switchLaneDelay;
@@ -44,6 +41,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float flashTime;
     [SerializeField] private bool startFlash = false;
     private Color startingColour;
+
+    public delegate void ActionSwitchLane();
+    public static event ActionSwitchLane OnSwitchLane;
+    public delegate void ActionTakeDamage();
+    public static event ActionTakeDamage OnTakeDamage;
+
     //These variables are from the IDamagable interface.
     public int StartingHealth
     {
@@ -82,8 +85,6 @@ public class PlayerController : MonoBehaviour, IDamagable
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
         screenFlash = FindObjectOfType<ScreenFlash>();
-        cameraController = FindObjectOfType<CameraController>();
-        print(cameraController);
         Health = startingHealth;
         damageImmuneTimeLeft = damageImmuneTime;
         startingColour = spriteRenderer.color;
@@ -92,10 +93,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        if (gameManager.IsGameOver == true || gameManager.HasWonGame == true) return;
         //Reset swiping left and right to false every frame.
         inputLeft = inputRight = false;
-        KeyboardMovement();
-        MouseCode();
+        KeyboardInput();
+        MouseInput();
         SwitchLanes();
 
         if(damageImmunity)
@@ -127,34 +129,18 @@ public class PlayerController : MonoBehaviour, IDamagable
             startDelay = false;
         }
 
-        if(startFlash)
-        {
-            //HitFlash();
-        }
-
         //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
         //Decrease damageImmuneTimeLeft by 1 every frame
         //Else reset damageImmuneTimeLeft and set damageImmunity to false.
-        if (damageImmunity)
-        {
-            if (damageImmuneTimeLeft > 0)
-            {
-                damageImmuneTimeLeft -= 1 * Time.deltaTime;
-            }
-            else
-            {
-                damageImmuneTimeLeft = damageImmuneTime;
-                damageImmunity = false;
-            }
-        }
+        DamageImmunityTimer();
 
-        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
             gameManager.TogglePauseState();
         }
     }
 
-    private void KeyboardMovement()
+    private void KeyboardInput()
     {
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         { 
@@ -166,7 +152,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
-    private void MouseCode()
+    private void MouseInput()
     {
         //Stores position of the cursor when the left mouse button is clicked.
         if (Input.GetMouseButtonDown(0))
@@ -204,32 +190,22 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         //Check if the player is not on the left most lane before moving the player to the left.
         //This is to ensure the player does not go offscreen.
-        if (inputLeft)
+        if (inputLeft && currentLaneNumber != 0)
         {
-            if (currentLaneNumber != 0)
-            {
-                dashParticles.Play();
-                float randFloat = Random.Range(0.8f, 1.1f);
-                dashSFXAudioSource.pitch = randFloat;
-                dashSFXAudioSource.Play();
-                startingPos = transform.position;
-                moveLeft = true;
-                playDashSound = true;
-            }
+            dashParticles.Play();
+            OnSwitchLane?.Invoke();
+            startingPos = transform.position;
+            moveLeft = true;
+            playDashSound = true;
         }
 
         //Same as above but for swiping right instead.
-        else if (inputRight)
-        {
-            if (currentLaneNumber != 2)
-            {
-                dashParticles.Play();
-                float randFloat = Random.Range(.75f, 1.2f);
-                dashSFXAudioSource.pitch = randFloat;
-                dashSFXAudioSource.Play();
-                startingPos = transform.position;
-                moveRight = true;
-            }
+        else if (inputRight && currentLaneNumber != 2)
+        {   
+           dashParticles.Play();
+           OnSwitchLane?.Invoke();
+           startingPos = transform.position;
+           moveRight = true;
         }
     }
 
@@ -243,16 +219,13 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             //Move player to the left.
             transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-            cameraController.MoveLeft();
             //If the player's position is <= to the lane that they were supposed to be moving to,
             //i.e if the player has gone further than they need to, reset the player's position.
             if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
             { 
-
                 burstParticles.transform.position -= new Vector3(.5f, 0f, 0f);
                 burstParticles.Play();
                 transform.position = new Vector2(lanePositions[currentLaneNumber - 1].x, transform.position.y);
-                //cameraController.transform.position = new Vector3(lanePositions[currentLaneNumber - 1].x, cameraController.transform.position.y, cameraController.transform.position.z);
                 currentLaneNumber -= 1;
                 moveLeft = false;
                 startDelay = true;
@@ -264,14 +237,11 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (moveRight)
         {
             transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-            cameraController.MoveRight();
             if (transform.position.x >= lanePositions[currentLaneNumber + 1].x)
             {
-
                 burstParticles.transform.position += new Vector3(.5f, 0f, 0f);
                 burstParticles.Play();
                 transform.position = new Vector2(lanePositions[currentLaneNumber + 1].x,transform.position.y);
-                //cameraController.transform.position = new Vector3(lanePositions[currentLaneNumber + 1].x, cameraController.transform.position.y, cameraController.transform.position.z);
                 currentLaneNumber += 1;
                 moveRight = false;
                 startDelay = true;
@@ -286,7 +256,6 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             startFlash = true;
             damageImmunity = true;
-            cameraController.CamShake();
             //freezeFrames = true;
             print(collision.gameObject);
         }
@@ -295,8 +264,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     //Function from IDamagable interface.
     public void TakeDamage(int _damage)
     {
-        if(Health > 0)
-        Health -= _damage;
+        if (Health > 0)
+        {
+            Health -= _damage;
+            OnTakeDamage?.Invoke();
+        }
+
         if (!screenFlash.startScreenFlash)
         {
             screenFlash.startScreenFlash = true;
@@ -386,5 +359,20 @@ public class PlayerController : MonoBehaviour, IDamagable
             timeElapsed = 0f;
             startFlash = false;
         }
+    }
+
+    private void DamageImmunityTimer()
+    {
+        if (!damageImmunity) return;
+
+            if (damageImmuneTimeLeft > 0)
+            {
+                damageImmuneTimeLeft -= 1 * Time.deltaTime;
+            }
+            else
+            {
+                damageImmuneTimeLeft = damageImmuneTime;
+                damageImmunity = false;
+            }
     }
 }

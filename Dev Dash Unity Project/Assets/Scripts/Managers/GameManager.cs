@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float distanceLeft = 3;
     [SerializeField] private float gameStartDelay;
     [SerializeField] private bool startGame = false;
+    [SerializeField] private bool isGameOver = false;
     [SerializeField] private int noOfCars;
     [SerializeField] private bool canSpawnCar = true;
     [SerializeField] private float carSpeed = 4;
@@ -55,8 +56,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    private bool isGameOver = false;
     public bool IsGameOver
     {
         get

@@ -17,7 +17,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject winScreen;
     [SerializeField] private GameObject pauseScreen;
     private GameManager gameManager;
-   
+
+
+    private void Awake()
+    {
+        PlayerController.OnTakeDamage += UpdateHealthText;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,20 +37,16 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Update texts every frame.
-        healthText.text = playerController.Health.ToString();
         distanceText.text = gameManager.DistanceLeft.ToString("F2") + " miles";
 
         //Display win screen if player has won.
         if (gameManager.HasWonGame)
         {
-            DisplayWinScreen();
+            DisplayEndResultsScreen(winScreen);
         }
-
-        //Display game over screen if player has lost.
-        if(gameManager.IsGameOver)
+        else if(gameManager.IsGameOver)
         {
-            DisplayGameOverScreen();
+            DisplayEndResultsScreen(gameOverScreen);
         }
 
         TogglePauseScreen();
@@ -60,16 +62,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void DisplayGameOverScreen()
+    private void UpdateHealthText()
     {
-        gameOverScreen.SetActive(true);
-        carsPassedText.gameObject.SetActive(true);
-        carsPassedText.text = "CARS PASSED: " + gameManager.CarsPassed;
+        healthText.text = playerController.Health.ToString();
     }
 
-    private void DisplayWinScreen()
+    private void DisplayEndResultsScreen(GameObject _screen)
     {
-        winScreen.SetActive(true);
+        _screen.SetActive(true);
         carsPassedText.gameObject.SetActive(true);
         carsPassedText.text = "CARS PASSED: " + gameManager.CarsPassed;
     }
@@ -85,5 +85,10 @@ public class UIManager : MonoBehaviour
         {
             pauseScreen.SetActive(false);
         }
+    }
+
+    private void OnDisable()
+    {
+        PlayerController.OnTakeDamage -= UpdateHealthText;
     }
 }
