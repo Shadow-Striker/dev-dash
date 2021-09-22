@@ -130,6 +130,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        PlayerController.OnPressPauseButton += TogglePauseState;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -228,5 +233,10 @@ public class GameManager : MonoBehaviour
             AudioListener.pause = true;
             pauseState = true;
         }
+    }
+
+    private void OnDisable()
+    {
+        PlayerController.OnPressPauseButton -= TogglePauseState;
     }
 }

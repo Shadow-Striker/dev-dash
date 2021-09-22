@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerController : MonoBehaviour, IDamagable
+public class PlayerControllerTwo : MonoBehaviour, IDamagable
 {
     private SpriteRenderer spriteRenderer;
     private PlayerInput playerInput;
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (gameManager.IsGameOver == true || gameManager.HasWonGame == true) return;
         SwitchLanes();
 
-        if(damageImmunity)
+        if (damageImmunity)
         {
             ImmuneAnimCheck();
         }
@@ -127,6 +127,15 @@ public class PlayerController : MonoBehaviour, IDamagable
             startMoveDelay = false;
         }
 
+        if (SwitchLanes() == moveLeft)
+        {
+            MoveToLeftLane();
+        }
+        else if(SwitchLanes() == moveRight)
+        {
+            MoveToRightLane();
+        }
+
         //if the player is currently immune to damage & damageImmuneTimeLeft is > 0,
         //Decrease damageImmuneTimeLeft by 1 every frame
         //Else reset damageImmuneTimeLeft and set damageImmunity to false.
@@ -139,10 +148,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     }
 
     //Prepare to switch lanes
-    private void SwitchLanes()
+    private bool SwitchLanes()
     {
         //Don't move the player to another lane if they are currently doing so.
-        if (moveLeft || moveRight) return;
+        if (moveLeft || moveRight) return false;
 
         //Check if the player is not on the left most lane before moving the player to the left.
         //This is to ensure the player does not go offscreen.
@@ -151,18 +160,20 @@ public class PlayerController : MonoBehaviour, IDamagable
             dashParticles.Play();
             OnSwitchLane?.Invoke();
             startingPos = transform.position;
-            moveLeft = true;
             playDashSound = true;
+            return moveLeft = true;
         }
 
         //Same as above but for swiping right instead.
         else if (playerInput.InputRight && currentLaneNumber != 2)
-        {   
-           dashParticles.Play();
-           OnSwitchLane?.Invoke();
-           startingPos = transform.position;
-           moveRight = true;
+        {
+            dashParticles.Play();
+            OnSwitchLane?.Invoke();
+            startingPos = transform.position;
+            return moveRight = true;
         }
+
+        return false;
     }
 
     //Actually switches between the lanes.
@@ -173,42 +184,21 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (moveLeft)
         {
-            //Move player to the left.
-            transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-            //If the player's position is <= to the lane that they were supposed to be moving to,
-            //i.e if the player has gone further than they need to, reset the player's position.
-            if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
-            { 
-                burstParticles.transform.position -= new Vector3(.5f, 0f, 0f);
-                burstParticles.Play();
-                transform.position = new Vector2(lanePositions[currentLaneNumber - 1].x, transform.position.y);
-                currentLaneNumber -= 1;
-                moveLeft = false;
-                startMoveDelay = true;
-            }
+
         }
 
 
         //Same as above but for moving right instead.
         if (moveRight)
         {
-            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-            if (transform.position.x >= lanePositions[currentLaneNumber + 1].x)
-            {
-                burstParticles.transform.position += new Vector3(.5f, 0f, 0f);
-                burstParticles.Play();
-                transform.position = new Vector2(lanePositions[currentLaneNumber + 1].x,transform.position.y);
-                currentLaneNumber += 1;
-                moveRight = false;
-                startMoveDelay = true;
-            }
+
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //If player collides with AI Car, set damageImmunity to true.
-        if(collision.gameObject.tag == "AICar" && !damageImmunity)
+        if (collision.gameObject.tag == "AICar" && !damageImmunity)
         {
             startFlash = true;
             damageImmunity = true;
@@ -230,29 +220,29 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
 
-   /* FOR INT I = 0 INT I< 6 I++
-    IF spriteRenderer.color.a == 1
-    THEN spriteRender.color.a = Mathf.Lerp(1, 0, 2)
-    ELSE IF spriteRenderer.color.a == 0
-    THEN spriteRender.color.a = Mathf.Lerp(1, 0, 2)
-    END IF
-    END FOR*/
+    /* FOR INT I = 0 INT I< 6 I++
+     IF spriteRenderer.color.a == 1
+     THEN spriteRender.color.a = Mathf.Lerp(1, 0, 2)
+     ELSE IF spriteRenderer.color.a == 0
+     THEN spriteRender.color.a = Mathf.Lerp(1, 0, 2)
+     END IF
+     END FOR*/
 
 
     private void ImmuneAnimCheck()
     {
-        if(spriteRenderer.color.a == 1f)
+        if (spriteRenderer.color.a == 1f)
         {
             decreaseAlpha = true;
-        }         
+        }
 
-        if(decreaseAlpha && ImmuneAnim(1f, .4f).a <= 0.4f)
+        if (decreaseAlpha && ImmuneAnim(1f, .4f).a <= 0.4f)
         {
             timeElapsed = 0.0f;
             decreaseAlpha = false;
         }
-        else if(ImmuneAnim(.4f, 1f).a == 1)
-        {           
+        else if (ImmuneAnim(.4f, 1f).a == 1)
+        {
             timeElapsed = 0.0f;
             return;
         }
@@ -305,50 +295,47 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if (!damageImmunity) return;
 
-            if (damageImmuneTimeLeft > 0)
-            {
-                damageImmuneTimeLeft -= 1 * Time.deltaTime;
-            }
-            else
-            {
-                damageImmuneTimeLeft = damageImmuneTime;
-                damageImmunity = false;
-            }
-    }
-
-
-    //TODO LaneMovementTwo and LaneMovementThree are currently not being used. Implement these into the code to see if they work.
-    private void LaneMovementTwo()
-    {
-        //Don't execute this function if the player has won/lost.
-        if (gameManager.IsGameOver == true || gameManager.HasWonGame == true || startMoveDelay) return;
-
-        if (moveLeft)
+        if (damageImmuneTimeLeft > 0)
         {
-            transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-            if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
-            {
-                LaneMovementThree(-1);
-                moveLeft = false;
-            }
+            damageImmuneTimeLeft -= 1 * Time.deltaTime;
         }
-        else if (moveRight)
+        else
         {
-            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-            if (transform.position.x >= lanePositions[currentLaneNumber + 1].x)
-            {
-                LaneMovementThree(1);
-                moveRight = false;
-            }
+            damageImmuneTimeLeft = damageImmuneTime;
+            damageImmunity = false;
         }
     }
 
-    private void LaneMovementThree(int _laneNumberModifier)
+    private void MoveToLeftLane()
     {
+        //Move player to the left.
+        transform.position += Vector3.left * moveSpeed * Time.deltaTime;
         //If the player's position is <= to the lane that they were supposed to be moving to,
         //i.e if the player has gone further than they need to, reset the player's position.
-        transform.position = new Vector2(lanePositions[currentLaneNumber + _laneNumberModifier].x, transform.position.y);
-        currentLaneNumber += _laneNumberModifier;
-        startMoveDelay = true;
+        if (transform.position.x <= lanePositions[currentLaneNumber - 1].x)
+        {
+            burstParticles.transform.position -= new Vector3(.5f, 0f, 0f);
+            burstParticles.Play();
+            transform.position = new Vector2(lanePositions[currentLaneNumber - 1].x, transform.position.y);
+            currentLaneNumber -= 1;
+            moveLeft = false;
+            startMoveDelay = true;
+        }
+    }
+
+    private void MoveToRightLane()
+    {
+        transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+
+        if (transform.position.x >= lanePositions[currentLaneNumber + 1].x)
+        {
+            burstParticles.transform.position += new Vector3(.5f, 0f, 0f);
+            burstParticles.Play();
+            transform.position = new Vector2(lanePositions[currentLaneNumber + 1].x, transform.position.y);
+            currentLaneNumber += 1;
+            moveRight = false;
+            startMoveDelay = true;
+        }
     }
 }
+

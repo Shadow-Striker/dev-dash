@@ -33,12 +33,9 @@ public class AICar : MonoBehaviour
         //And increase the speed slightly every frame until the speed reaches 7.
         //This is to make the game gradually harder.
 
-        if (!gameManager.HasWonGame)
-        {
-            Movement();
-            // if (speed < 8.5f)
-            //speed += 0.002f;
-        }
+        if (gameManager.HasWonGame) return;
+
+        Movement();
 
         if (!isVisible)
         {
@@ -50,9 +47,7 @@ public class AICar : MonoBehaviour
                 isVisible = true;
                 gameObject.SetActive(false);
             }
-
         }
-
     }
 
     //Moves car downwards every frame.

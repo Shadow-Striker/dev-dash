@@ -7,17 +7,12 @@ using System;
 public class UIManager : MonoBehaviour
 {
     //This class is in charge of the UI.
-    [SerializeField] private Text healthText;
-    [SerializeField] private Text distanceText;
-    [SerializeField] private Text pauseText;
-    [SerializeField] private Text carsPassedText;
-
+    [SerializeField] private Text healthText, distanceText, pauseText, carsPassedText;
     private PlayerController playerController;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject winScreen;
     [SerializeField] private GameObject pauseScreen;
     private GameManager gameManager;
-
 
     private void Awake()
     {

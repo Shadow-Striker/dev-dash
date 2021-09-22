@@ -43331,10 +43331,11 @@ GameObject:
   - component: {fileID: 2020252470}
   - component: {fileID: 2020252469}
   - component: {fileID: 2020252471}
-  - component: {fileID: 2020252473}
-  - component: {fileID: 2020252475}
-  - component: {fileID: 2020252472}
   - component: {fileID: 2020252474}
+  - component: {fileID: 2020252475}
+  - component: {fileID: 2020252473}
+  - component: {fileID: 2020252472}
+  - component: {fileID: 2020252476}
   m_Layer: 0
   m_Name: Player Car
   m_TagString: Player
@@ -43437,8 +43438,6 @@ MonoBehaviour:
   deadZone: 50
   currentLaneNumber: 1
   tap: 0
-  inputLeft: 0
-  inputRight: 0
   freezeFrames: 0
   frameCount: 0
   moveLeft: 0
@@ -43452,12 +43451,11 @@ MonoBehaviour:
   decreaseAlpha: 0
   increaseAlpha: 0
   alphaLerpDuration: 0.33
-  mousePos: {x: 0, y: 0, z: 0}
   dashParticles: {fileID: 265365809}
   burstParticles: {fileID: 778710668}
   switchLaneDelayLeft: 0
   switchLaneDelay: 0.1
-  startDelay: 0
+  startMoveDelay: 0
   flashTimeLeft: 0
   flashTime: 0.02
   startFlash: 0
@@ -43508,55 +43506,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.22, y: 1.0761054}
   m_EdgeRadius: 0
---- !u!331 &2020252474
-SpriteMask:
+--- !u!114 &2020252474
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020252468}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10758, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7c9f8bcca081fac489d615410bbb4ba7, type: 3}
-  m_MaskAlphaCutoff: 1
-  m_FrontSortingLayerID: 0
-  m_BackSortingLayerID: 0
-  m_FrontSortingLayer: 0
-  m_BackSortingLayer: 0
-  m_FrontSortingOrder: 0
-  m_BackSortingOrder: 0
-  m_IsCustomRangeActive: 0
-  m_SpriteSortPoint: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cad04dcc95189248824fa97c6bcb444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2020252475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43570,6 +43531,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashSFXAudioSource: {fileID: 2035027849}
+--- !u!114 &2020252476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020252468}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e22bbd242c9e15744827a488c2f963da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites: []
+  damageImmunity: 0
+  damageImmuneTime: 3
+  damageImmuneTimeLeft: 0
+  startingHealth: 3
+  moveSpeed: 12
+  deadZone: 50
+  currentLaneNumber: 1
+  tap: 0
+  freezeFrames: 0
+  frameCount: 0
+  moveLeft: 0
+  moveRight: 0
+  startMousePos: {x: 0, y: 0}
+  endMousePos: {x: 0, y: 0}
+  lanePositions:
+  - {x: -2, y: 0}
+  - {x: 0, y: 0}
+  - {x: 2, y: 0}
+  decreaseAlpha: 0
+  increaseAlpha: 0
+  alphaLerpDuration: 0.33
+  dashParticles: {fileID: 0}
+  burstParticles: {fileID: 0}
+  switchLaneDelayLeft: 0
+  switchLaneDelay: 0
+  startMoveDelay: 0
+  flashTimeLeft: 0
+  flashTime: 0
+  startFlash: 0
 --- !u!1 &2035027848
 GameObject:
   m_ObjectHideFlags: 0

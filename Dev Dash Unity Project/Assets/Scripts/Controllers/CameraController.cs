@@ -17,12 +17,6 @@ public class CameraController : MonoBehaviour
         settingsManager = FindObjectOfType<SettingsManager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void CamShake()
     {
         if(settingsManager != null && SettingsManager.Instance.ScreenShake)
